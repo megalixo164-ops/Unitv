@@ -300,11 +300,12 @@ export const Pricing: React.FC = () => {
             </div>
           </div>
 
-          {/* Native Touch-Swipe Horizontal Carousel Track with Real-Time Smooth Scale/Opacity */}
+          {/* Native Touch-Swipe Horizontal Carousel Track with Vertical Scroll Passthrough */}
           <div
             ref={carouselRef}
             onScroll={handleScroll}
-            className="flex items-stretch gap-3.5 overflow-x-auto snap-x snap-mandatory pt-6 pb-7 px-[9vw] -mx-4 touch-pan-x overscroll-x-contain [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{ touchAction: 'pan-x pan-y' }}
+            className="flex items-stretch gap-3.5 overflow-x-auto overflow-y-visible snap-x snap-mandatory pt-6 pb-7 px-[9vw] -mx-4 overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {PLANS_1_SCREEN.map((plan, idx) => {
               const isHighlight = plan.popular || plan.bestValue;
@@ -322,12 +323,13 @@ export const Pricing: React.FC = () => {
                   data-plan-card
                   onClick={() => scrollToCard(idx)}
                   style={{
+                    touchAction: 'pan-x pan-y',
                     transform: `translate3d(0, ${translateY.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`,
                     opacity: Number(opacity.toFixed(2)),
                     transition: 'transform 140ms cubic-bezier(0.22, 1, 0.36, 1), opacity 140ms ease-out, border-color 200ms ease, box-shadow 200ms ease',
                     willChange: 'transform, opacity',
                   }}
-                  className={`snap-center snap-always shrink-0 w-[82vw] max-w-[318px] relative rounded-3xl p-6 flex flex-col justify-between select-none ${
+                  className={`snap-center shrink-0 w-[82vw] max-w-[318px] relative rounded-3xl p-6 flex flex-col justify-between select-none ${
                     isCurrent
                       ? isHighlight
                         ? 'bg-white border-2 border-pink-500 shadow-xl shadow-pink-500/15'
