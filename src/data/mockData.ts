@@ -145,6 +145,12 @@ export const STREAMING_PLATFORMS: StreamingPlatform[] = [
     description: 'Superproduções com alta fidelidade de áudio e imagem 4K',
     badgeColor: 'bg-zinc-800 text-white',
     popularTitles: ['Ted Lasso', 'Severance', 'Yellowstone', 'Tulsa King']
+  },
+  {
+    name: 'Crunchyroll',
+    description: 'O maior catálogo de animes do mundo dublados e legendados em HD',
+    badgeColor: 'bg-orange-500 text-white',
+    popularTitles: ['One Piece', 'Jujutsu Kaisen', 'Solo Leveling', 'Demon Slayer']
   }
 ];
 

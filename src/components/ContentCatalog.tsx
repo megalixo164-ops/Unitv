@@ -6,182 +6,125 @@ import {
 } from '../data/mockData';
 import {
   Film,
+  Tv,
   CheckCircle,
   MessageCircle,
 } from 'lucide-react';
 
+interface LiveTvChannelItem {
+  id: string;
+  name: string;
+  logoSrc: string;
+  category: string;
+  highlights: string;
+  quality: string;
+  bgClass?: string;
+}
+
+const LIVE_CHANNELS_MARQUEE: LiveTvChannelItem[] = [
+  {
+    id: 'espn',
+    name: 'ESPN',
+    logoSrc: '/assets/logos/espn.svg',
+    category: 'Esportes & Futebol',
+    highlights: 'Libertadores · Premier League · NBA · NFL',
+    quality: '4K & FHD',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'premiere',
+    name: 'Premiere',
+    logoSrc: '/assets/logos/premiere.svg',
+    category: 'Futebol Brasileiro',
+    highlights: 'Brasileirão Série A & B · Copa do Brasil',
+    quality: '4K 60FPS',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'globo',
+    name: 'TV Globo',
+    logoSrc: '/assets/logos/globo.svg',
+    category: 'Canal Aberto',
+    highlights: 'Novelas · Jornal Nacional · Futebol Ao Vivo',
+    quality: '4K UHD',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'sbt',
+    name: 'SBT',
+    logoSrc: '/assets/logos/sbt.svg',
+    category: 'Canal Aberto',
+    highlights: 'Champions League · Sul-Americana · Entretenimento',
+    quality: 'Full HD',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'discovery',
+    name: 'Discovery Channel',
+    logoSrc: '/assets/logos/discovery.svg',
+    category: 'Documentários & Aventura',
+    highlights: 'Largados e Pelados · Sobrevivência · Ciência',
+    quality: '4K UHD',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'sportv',
+    name: 'SporTV',
+    logoSrc: '/assets/logos/sportv.svg',
+    category: 'Esportes 24 Horas',
+    highlights: 'Jogos Ao Vivo · Seleção · Vôlei · Tá na Área',
+    quality: '4K 60FPS',
+    bgClass: 'bg-white border-slate-200',
+  },
+  {
+    id: 'tnt',
+    name: 'TNT Sports',
+    logoSrc: '/assets/logos/tnt.svg',
+    category: 'Champions & Cinema',
+    highlights: 'UEFA Champions League · Paulistão · Filmes',
+    quality: 'Full HD',
+    bgClass: 'bg-white border-slate-200',
+  },
+];
+
 const StreamingBrandLogo: React.FC<{ name: string }> = ({ name }) => {
   const lower = name.toLowerCase();
 
-  // Official Netflix "N" Ribbon Icon
+  let logoSrc = '/assets/logos/netflix.svg';
   if (lower.includes('netflix')) {
-    return (
-      <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs border border-slate-800">
-        <svg viewBox="0 0 24 24" className="w-5.5 h-5.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 2H9V22H5V2Z" fill="#B1060F" />
-          <path d="M15 2H19V22H15V2Z" fill="#B1060F" />
-          <path d="M5 2H9.2L19 22H14.8L5 2Z" fill="#E50914" />
-        </svg>
-      </div>
-    );
+    logoSrc = '/assets/logos/netflix.svg';
+  } else if (lower.includes('max') || lower.includes('hbo')) {
+    logoSrc = '/assets/logos/max.svg';
+  } else if (lower.includes('disney')) {
+    logoSrc = '/assets/logos/disney.svg';
+  } else if (lower.includes('prime')) {
+    logoSrc = '/assets/logos/prime.svg';
+  } else if (lower.includes('globoplay')) {
+    logoSrc = '/assets/logos/globoplay.svg';
+  } else if (lower.includes('crunchyroll')) {
+    logoSrc = '/assets/logos/crunchyroll.svg';
+  } else {
+    logoSrc = '/assets/logos/appletv.svg';
   }
 
-  // Official Max (HBO) Wordmark Logo
-  if (lower.includes('max') || lower.includes('hbo')) {
-    return (
-      <div className="w-10 h-10 rounded-xl bg-[#002BE7] flex items-center justify-center shrink-0 shadow-xs">
-        <svg viewBox="0 0 64 28" className="w-8 h-4.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text
-            x="32"
-            y="20"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Outfit, Plus Jakarta Sans, sans-serif"
-            fontWeight="900"
-            fontSize="20"
-            letterSpacing="-0.5"
-          >
-            max
-          </text>
-          <circle cx="35.5" cy="14.5" r="2.2" fill="#002BE7" />
-          <circle cx="35.5" cy="14.5" r="1.1" fill="#FFFFFF" />
-        </svg>
-      </div>
-    );
-  }
-
-  // Official Disney+ Logo with Shooting Star Arc
-  if (lower.includes('disney')) {
-    return (
-      <div className="w-10 h-10 rounded-xl bg-[#040714] flex items-center justify-center shrink-0 shadow-xs border border-slate-800">
-        <svg viewBox="0 0 68 36" className="w-8 h-5.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M10 18C18 5 44 4 54 15"
-            stroke="url(#disneyArc)"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-          <defs>
-            <linearGradient id="disneyArc" x1="10" y1="18" x2="54" y2="15" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0063E5" stopOpacity="0.2" />
-              <stop offset="60%" stopColor="#00B4FF" />
-              <stop offset="100%" stopColor="#FFFFFF" />
-            </linearGradient>
-          </defs>
-          <text
-            x="33"
-            y="26"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Plus Jakarta Sans, sans-serif"
-            fontWeight="800"
-            fontSize="13.5"
-            letterSpacing="-0.3"
-          >
-            Disney+
-          </text>
-        </svg>
-      </div>
-    );
-  }
-
-  // Official Amazon Prime Video Logo with Smile Arrow
-  if (lower.includes('prime')) {
-    return (
-      <div className="w-10 h-10 rounded-xl bg-[#00A8E1] flex items-center justify-center shrink-0 shadow-xs">
-        <svg viewBox="0 0 64 36" className="w-8 h-5.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text
-            x="32"
-            y="18"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Plus Jakarta Sans, sans-serif"
-            fontWeight="800"
-            fontSize="14.5"
-            letterSpacing="-0.3"
-          >
-            prime
-          </text>
-          <path
-            d="M16 24.5C24 29.5 40 29.5 48 24.5"
-            stroke="#FFFFFF"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-          <path
-            d="M44.5 23.5L49 24.2L47.2 28"
-            stroke="#FFFFFF"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    );
-  }
-
-  // Official Globoplay Logo
-  if (lower.includes('globoplay')) {
-    return (
-      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF073A] via-[#FF4D00] to-[#FF8A00] flex items-center justify-center shrink-0 shadow-xs">
-        <svg viewBox="0 0 64 32" className="w-8 h-4.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text
-            x="32"
-            y="15"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Outfit, sans-serif"
-            fontWeight="900"
-            fontSize="12.5"
-            letterSpacing="-0.3"
-          >
-            globo
-          </text>
-          <text
-            x="32"
-            y="26"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Outfit, sans-serif"
-            fontWeight="700"
-            fontSize="11.5"
-            letterSpacing="-0.2"
-          >
-            play
-          </text>
-        </svg>
-      </div>
-    );
-  }
-
-  // Official Apple TV+ Logo
   return (
-    <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs border border-slate-800">
-      <svg viewBox="0 0 56 28" className="w-8 h-4.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M15.8 11.4C15.8 9.6 17.3 8.6 17.4 8.5C16.5 7.2 15.1 7 14.6 7C13.4 6.9 12.3 7.7 11.7 7.7C11.1 7.7 10.2 7 9.2 7C7.9 7 6.7 7.8 6.1 8.9C4.8 11.2 5.8 14.6 7 16.4C7.6 17.3 8.4 18.3 9.4 18.2C10.3 18.2 10.7 17.6 11.8 17.6C12.9 17.6 13.3 18.2 14.2 18.2C15.2 18.2 15.9 17.3 16.5 16.4C17.2 15.4 17.5 14.4 17.5 14.3C17.5 14.2 15.8 13.6 15.8 11.4ZM13.8 5.2C14.3 4.6 14.7 3.7 14.6 2.8C13.8 2.8 12.8 3.3 12.3 4C11.8 4.5 11.4 5.4 11.5 6.3C12.4 6.4 13.3 5.8 13.8 5.2Z"
-          fill="#FFFFFF"
-        />
-        <text
-          x="36"
-          y="17.5"
-          textAnchor="middle"
-          fill="#FFFFFF"
-          fontFamily="Plus Jakarta Sans, sans-serif"
-          fontWeight="800"
-          fontSize="14.5"
-          letterSpacing="-0.5"
-        >
-          tv+
-        </text>
-      </svg>
+    <div className="w-12 h-11 rounded-xl bg-white border border-slate-200/90 p-1.5 flex items-center justify-center shrink-0 shadow-2xs">
+      <img
+        src={logoSrc}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        referrerPolicy="no-referrer"
+        className="w-full h-full object-contain pointer-events-none"
+      />
     </div>
   );
 };
 
 export const ContentCatalog: React.FC = () => {
-  // Duplicate array for seamless infinite loop
+  // Duplicate arrays for seamless infinite loop
   const infinitePlatforms = [...STREAMING_PLATFORMS, ...STREAMING_PLATFORMS];
+  const infiniteChannels = [...LIVE_CHANNELS_MARQUEE, ...LIVE_CHANNELS_MARQUEE];
 
   return (
     <section
@@ -203,8 +146,8 @@ export const ContentCatalog: React.FC = () => {
           </p>
         </div>
 
-        {/* Subheader above Infinite Marquee */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+        {/* 1. Subheader above Streaming Infinite Marquee */}
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
             <Film className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 shrink-0" />
             <span>Plataformas de Streaming Já Inclusas no UniTV</span>
@@ -215,9 +158,8 @@ export const ContentCatalog: React.FC = () => {
         </div>
       </div>
 
-      {/* Infinite Horizontal Marquee Track (Compact & Fluid) */}
-      <div className="relative w-full py-2 mb-8 sm:mb-10">
-        {/* Soft left & right edge fade masks */}
+      {/* 1. Infinite Horizontal Marquee Track: Official Streaming Platforms */}
+      <div className="relative w-full py-2 mb-7 sm:mb-9">
         <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
@@ -245,6 +187,69 @@ export const ContentCatalog: React.FC = () => {
               </p>
               <p className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate">
                 {platform.popularTitles.join(' · ')}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. Subheader above Live TV Channels Infinite Marquee */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <Tv className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 shrink-0" />
+            <span>Canais Ao Vivo em 4K & Full HD Inclusos</span>
+          </h3>
+          <span className="text-xs font-bold text-emerald-600">
+            Esportes · Canais Abertos · Documentários
+          </span>
+        </div>
+      </div>
+
+      {/* 2. Infinite Horizontal Marquee Track: Official Live TV Channels */}
+      <div className="relative w-full py-2 mb-8 sm:mb-10">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
+
+        <div className="animate-marquee-infinite-reverse gap-3.5 sm:gap-4 px-2">
+          {infiniteChannels.map((channel, index) => (
+            <div
+              key={`${channel.id}-${index}`}
+              className="w-[260px] sm:w-[290px] shrink-0 bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 hover:border-orange-400 transition-colors select-none"
+            >
+              <div className="flex items-center justify-between gap-2.5 mb-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className={`w-12 h-11 rounded-xl border p-1.5 flex items-center justify-center shrink-0 shadow-2xs ${
+                      channel.bgClass || 'bg-white border-slate-200'
+                    }`}
+                  >
+                    <img
+                      src={channel.logoSrc}
+                      alt={`Logo oficial ${channel.name}`}
+                      loading="lazy"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain pointer-events-none"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-xs sm:text-sm font-black text-slate-950 truncate">
+                      {channel.name}
+                    </h4>
+                    <span className="text-[10px] font-bold text-slate-500 block truncate">
+                      {channel.category}
+                    </span>
+                  </div>
+                </div>
+
+                <span className="text-[10px] font-extrabold text-purple-700 shrink-0">
+                  {channel.quality}
+                </span>
+              </div>
+
+              <p className="text-[10px] sm:text-[11px] text-slate-500 font-semibold truncate">
+                {channel.highlights}
               </p>
             </div>
           ))}
