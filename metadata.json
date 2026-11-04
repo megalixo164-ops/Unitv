@@ -1,0 +1,6 @@
+{
+  "name": "Leandro TV+",
+  "description": "Plataforma premium de TV online com mais de 80.000 conteúdos, canais ao vivo em 4K e Full HD, filmes e séries sem travamentos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
