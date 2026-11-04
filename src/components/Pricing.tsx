@@ -18,13 +18,94 @@ import {
   ChevronLeft,
   ChevronRight,
   MoveHorizontal,
+  Film,
+  Star,
 } from 'lucide-react';
+
+interface MovieReleaseItem {
+  id: string;
+  title: string;
+  genre: string;
+  year: string;
+  rating: string;
+  quality: string;
+  poster: string;
+}
+
+const FEATURED_MOVIES_RELEASES: MovieReleaseItem[] = [
+  {
+    id: 'ainda-estou-aqui',
+    title: 'Ainda Estou Aqui',
+    genre: 'Drama · Vencedor do Oscar',
+    year: '2025',
+    rating: '9.6',
+    quality: '4K UHD',
+    poster: '/assets/movies/ainda-estou-aqui.jpg',
+  },
+  {
+    id: 'capitao-america-4',
+    title: 'Capitão América: Admirável Mundo Novo',
+    genre: 'Ação · Marvel Studios',
+    year: '2025',
+    rating: '9.1',
+    quality: '4K HDR',
+    poster: '/assets/movies/capitao-america-4.jpg',
+  },
+  {
+    id: 'moana-2',
+    title: 'Moana 2',
+    genre: 'Animação · Família',
+    year: '2025',
+    rating: '9.3',
+    quality: '4K UHD',
+    poster: '/assets/movies/moana-2.jpg',
+  },
+  {
+    id: 'gladiador-2',
+    title: 'Gladiador II',
+    genre: 'Ação · Épico',
+    year: '2025',
+    rating: '9.2',
+    quality: '4K HDR',
+    poster: '/assets/movies/gladiador-2.jpg',
+  },
+  {
+    id: 'deadpool-wolverine',
+    title: 'Deadpool & Wolverine',
+    genre: 'Ação · Comédia',
+    year: '2024',
+    rating: '9.5',
+    quality: '4K 60FPS',
+    poster: '/assets/movies/deadpool-wolverine.jpg',
+  },
+  {
+    id: 'divertida-mente-2',
+    title: 'Divertida Mente 2',
+    genre: 'Animação · Disney Pixar',
+    year: '2024',
+    rating: '9.4',
+    quality: '4K UHD',
+    poster: '/assets/movies/divertida-mente-2.jpg',
+  },
+  {
+    id: 'duna-parte-2',
+    title: 'Duna: Parte 2',
+    genre: 'Ficção Científica · Aventura',
+    year: '2024',
+    rating: '9.5',
+    quality: '4K HDR',
+    poster: '/assets/movies/duna-parte-2.jpg',
+  },
+];
 
 export const Pricing: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(1); // Trimestral (Mais Vendido)
   const [cardProgress, setCardProgress] = useState<number[]>([1, 0, 1, 2]); // Distance from center (0 = centered)
+
+  // Duplicate 7 movies array for seamless infinite conveyor belt loop
+  const infiniteMovies = [...FEATURED_MOVIES_RELEASES, ...FEATURED_MOVIES_RELEASES];
 
   const getPlanWhatsappUrl = (plan: Plan) => {
     const text = `Olá, vim pelo site da Leandro TV+ e quero assinar o *${plan.name}* no valor de R$ ${plan.price.toFixed(2).replace('.', ',')}.`;
@@ -46,7 +127,6 @@ export const Pricing: React.FC = () => {
     cards.forEach((card, idx) => {
       const cardCenter = card.offsetLeft + card.clientWidth / 2;
       const rawDist = Math.abs(containerCenter - cardCenter);
-      // Normalized distance: 0 when centered, 1 when one full card away
       const normalized = Math.min(1.5, rawDist / (card.clientWidth || 300));
       distances.push(normalized);
 
@@ -222,8 +302,74 @@ export const Pricing: React.FC = () => {
   return (
     <section
       id="planos"
-      className="py-14 sm:py-20 bg-slate-50 border-b border-slate-200 overflow-hidden"
+      className="py-12 sm:py-20 bg-slate-50 border-b border-slate-200 overflow-hidden"
     >
+      {/* ===================================================================
+          7 FILMES LANÇAMENTOS ATUALIZADOS RODANDO NA PARTE DE CIMA
+      =================================================================== */}
+      <div className="mb-10 sm:mb-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Film className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 shrink-0" />
+            <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
+              Sucessos de Cinema Já Liberados no UniTV
+            </h3>
+          </div>
+          <span className="text-[11px] sm:text-xs font-bold text-purple-700 whitespace-nowrap">
+            Dublado & Legendado · 4K
+          </span>
+        </div>
+
+        <div className="relative w-full py-1">
+          {/* Soft fade masks on edges */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-slate-50 to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-slate-50 to-transparent z-10" />
+
+          <div className="animate-marquee-infinite gap-3.5 sm:gap-4 px-2">
+            {infiniteMovies.map((movie, idx) => (
+              <a
+                key={`${movie.id}-${idx}`}
+                href={WHATSAPP_TRIAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative w-[142px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-all select-none"
+              >
+                <img
+                  src={movie.poster}
+                  alt={movie.title}
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+                />
+
+                {/* Measured contrast scrim at bottom for poster title & rating */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-between p-2.5 sm:p-3">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] font-black text-white bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded-md">
+                      {movie.quality}
+                    </span>
+                    <span className="text-[10px] font-bold text-amber-400 bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded-md flex items-center gap-0.5 tabular-nums">
+                      <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                      {movie.rating}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight line-clamp-2">
+                      {movie.title}
+                    </h4>
+                    <p className="text-[10px] text-slate-300 font-medium mt-0.5 truncate">
+                      {movie.genre}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
@@ -312,10 +458,9 @@ export const Pricing: React.FC = () => {
               const isCurrent = activeIndex === idx;
               const dist = cardProgress[idx] ?? (isCurrent ? 0 : 1);
 
-              // Subtle, fluid interpolation based on real-time finger drag distance
-              const scale = 1 - Math.min(dist, 1) * 0.055; // 1.0 when centered -> 0.945 on sides
-              const opacity = 1 - Math.min(dist, 1) * 0.22; // 1.0 when centered -> 0.78 on sides
-              const translateY = Math.min(dist, 1) * 6; // Slight 6px lift when centered
+              const scale = 1 - Math.min(dist, 1) * 0.055;
+              const opacity = 1 - Math.min(dist, 1) * 0.22;
+              const translateY = Math.min(dist, 1) * 6;
 
               return (
                 <div
