@@ -23,13 +23,20 @@ export const Navbar: React.FC = () => {
       <div className="h-1 w-full bg-gradient-to-r from-[#FF9900] via-[#FF1E56] via-55% to-[#00A8FF]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-6">
-        {/* Zone 1: Brand Logo (Horizontal adaptation) */}
+        {/* Zone 1: Brand Text Only (LeandroTV) */}
         <a
           href="#hero"
-          className="flex items-center shrink-0 focus:outline-hidden"
-          aria-label="Leandro TV+ Início"
+          className="flex items-center shrink-0 focus:outline-hidden select-none"
+          aria-label="LeandroTV Início"
         >
-          <Logo variant="light" size="sm" layout="horizontal" showSubtitle={false} />
+          <span className="text-xl sm:text-2xl font-black tracking-tight leading-none whitespace-nowrap">
+            <span className="bg-gradient-to-r from-[#FF9900] via-[#FF1E56] via-50% to-[#6E28D9] bg-clip-text text-transparent font-extrabold">
+              Leandro
+            </span>
+            <span className="bg-gradient-to-r from-[#5B21B6] via-[#0066FF] to-[#00C2FF] bg-clip-text text-transparent font-black">
+              TV
+            </span>
+          </span>
         </a>
 
         {/* Zone 2: 5 Concise Single-Line Navigation Links */}
