@@ -1,75 +1,142 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence, PanInfo } from 'motion/react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { TESTIMONIALS } from '../data/mockData';
-import { Testimonial } from '../types';
 import {
   Star,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Layers,
+  MoveHorizontal,
   Quote,
 } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
-  const [deck, setDeck] = useState<Testimonial[]>(TESTIMONIALS);
-  const [exitDirection, setExitDirection] = useState<'left' | 'right'>('left');
-  const [isPaused, setIsPaused] = useState(false);
+  const total = TESTIMONIALS.length;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [lastMovedIndex, setLastMovedIndex] = useState<number | null>(null);
+  const [swipeDir, setSwipeDir] = useState<-1 | 1>(-1);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
 
-  // Move top card to the last position in the deck (infinite loop)
-  const handleNextCard = useCallback((dir: 'left' | 'right' = 'left') => {
-    setExitDirection(dir);
-    setDeck((prev) => {
-      if (prev.length <= 1) return prev;
-      const [first, ...rest] = prev;
-      return [...rest, first];
-    });
-  }, []);
+  // Touch / Pointer gesture tracking refs for 60fps mobile swipe
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const startTimeRef = useRef(0);
+  const axisLockedRef = useRef<'x' | 'y' | null>(null);
+  const pointerDownRef = useRef(false);
 
-  // Bring the last card in the deck back to the top
-  const handlePrevCard = useCallback(() => {
-    setExitDirection('right');
-    setDeck((prev) => {
-      if (prev.length <= 1) return prev;
-      const last = prev[prev.length - 1];
-      const rest = prev.slice(0, prev.length - 1);
-      return [last, ...rest];
-    });
-  }, []);
+  const goToNextCard = useCallback(
+    (direction: -1 | 1 = -1) => {
+      setSwipeDir(direction);
+      setLastMovedIndex(activeIndex);
+      setActiveIndex((prev) => (prev + 1) % total);
+      setDragX(0);
+      setIsDragging(false);
+    },
+    [activeIndex, total]
+  );
 
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    const swipeThreshold = 45;
-    const velocityThreshold = 260;
+  const goToPrevCard = useCallback(() => {
+    setSwipeDir(1);
+    setLastMovedIndex(null);
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+    setDragX(0);
+    setIsDragging(false);
+  }, [total]);
 
-    if (
-      info.offset.x < -swipeThreshold ||
-      info.velocity.x < -velocityThreshold
-    ) {
-      handleNextCard('left');
-    } else if (
-      info.offset.x > swipeThreshold ||
-      info.velocity.x > velocityThreshold
-    ) {
-      handleNextCard('right');
+  // Auto-advance every 6.5s when user is not touching/hovering
+  useEffect(() => {
+    if (isInteracting || isDragging) return;
+    const timer = setInterval(() => {
+      goToNextCard(-1);
+    }, 6500);
+    return () => clearInterval(timer);
+  }, [isInteracting, isDragging, goToNextCard]);
+
+  // Unified Touch Handlers (Mobile First, never blocks vertical scroll)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    startXRef.current = touch.clientX;
+    startYRef.current = touch.clientY;
+    startTimeRef.current = Date.now();
+    axisLockedRef.current = null;
+    setIsInteracting(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - startXRef.current;
+    const dy = touch.clientY - startYRef.current;
+
+    if (!axisLockedRef.current) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      axisLockedRef.current = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    }
+
+    // If user is scrolling vertically, do not intercept
+    if (axisLockedRef.current === 'y') {
+      return;
+    }
+
+    setIsDragging(true);
+    // Dampen extreme drag distances
+    const clampedDx = Math.max(-180, Math.min(180, dx));
+    setDragX(clampedDx);
+  };
+
+  const handleTouchEnd = () => {
+    if (axisLockedRef.current === 'x') {
+      const elapsed = Math.max(1, Date.now() - startTimeRef.current);
+      const velocity = Math.abs(dragX) / elapsed; // px per ms
+
+      if (Math.abs(dragX) > 38 || (Math.abs(dragX) > 15 && velocity > 0.35)) {
+        goToNextCard(dragX < 0 ? -1 : 1);
+      } else {
+        setDragX(0);
+        setIsDragging(false);
+      }
+    } else {
+      setDragX(0);
+      setIsDragging(false);
+    }
+    axisLockedRef.current = null;
+    setTimeout(() => setIsInteracting(false), 1200);
+  };
+
+  // Mouse Drag Handlers for Desktop
+  const handleMouseDown = (e: React.MouseEvent) => {
+    pointerDownRef.current = true;
+    startXRef.current = e.clientX;
+    startTimeRef.current = Date.now();
+    setIsInteracting(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!pointerDownRef.current) return;
+    const dx = e.clientX - startXRef.current;
+    if (Math.abs(dx) > 5) {
+      setIsDragging(true);
+      setDragX(Math.max(-180, Math.min(180, dx)));
     }
   };
 
-  // Gentle auto-shuffle every 6.5s unless user is interacting
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
-      handleNextCard('left');
-    }, 6500);
-    return () => clearInterval(timer);
-  }, [isPaused, handleNextCard]);
+  const handleMouseUp = () => {
+    if (!pointerDownRef.current) return;
+    pointerDownRef.current = false;
 
-  const activeCard = deck[0];
-  const activeOriginalIndex = TESTIMONIALS.findIndex(
-    (t) => t.id === activeCard?.id
-  );
+    if (Math.abs(dragX) > 40) {
+      goToNextCard(dragX < 0 ? -1 : 1);
+    } else {
+      setDragX(0);
+      setIsDragging(false);
+    }
+  };
+
+  // Progress of current finger drag (0 to 1) to smoothly lift the underlying cards
+  const dragProgress = Math.min(1, Math.abs(dragX) / 130);
 
   return (
     <section
@@ -130,142 +197,186 @@ export const Testimonials: React.FC = () => {
           </div>
         </div>
 
-        {/* Interactive Stacked Card Deck ("Passar Cartas em Loop") */}
+        {/* 3D Stacked Card Deck Stage */}
         <div
-          className="max-w-lg mx-auto"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
+          className="max-w-md mx-auto select-none"
+          onMouseEnter={() => setIsInteracting(true)}
+          onMouseLeave={() => {
+            pointerDownRef.current = false;
+            setDragX(0);
+            setIsDragging(false);
+            setIsInteracting(false);
+          }}
         >
-          {/* Subtle Swipe Hint */}
+          {/* Swipe Instruction Indicator */}
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-500 mb-3">
-            <Layers className="w-3.5 h-3.5 text-pink-600" />
-            <span>Arraste a carta para o lado ou toque para passar</span>
+            <MoveHorizontal className="w-3.5 h-3.5 text-pink-600 animate-pulse" />
+            <span>Deslize o card com o dedo para passar</span>
           </div>
 
-          {/* Deck Stage */}
-          <div className="relative h-[250px] sm:h-[245px] w-full flex items-start justify-center pt-1">
-            <AnimatePresence initial={false} mode="popLayout">
-              {deck.slice(0, 3).map((card, stackIndex) => {
-                const isTop = stackIndex === 0;
-                const scale = 1 - stackIndex * 0.055;
-                const translateY = stackIndex * 14;
-                const zIndex = 30 - stackIndex * 10;
-                const cardOpacity = 1 - stackIndex * 0.22;
+          {/* Stacked Cards Container (All cards strictly absolute so they stack cleanly) */}
+          <div
+            style={{ touchAction: 'pan-y' }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            className="relative h-[225px] sm:h-[220px] w-full cursor-grab active:cursor-grabbing"
+          >
+            {TESTIMONIALS.map((card, idx) => {
+              // 0 = front card, 1 = second, 2 = third, 3 = back card (just swiped)
+              const stackPos = (idx - activeIndex + total) % total;
+              const isFront = stackPos === 0;
+              const isJustMovedToBack =
+                idx === lastMovedIndex && stackPos === total - 1;
 
-                return (
-                  <motion.div
-                    key={card.id}
-                    layout
-                    style={{
-                      zIndex,
-                      touchAction: 'pan-y',
-                    }}
-                    initial={{
-                      scale: 0.88,
-                      y: 36,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      scale,
-                      y: translateY,
-                      x: 0,
-                      rotate: 0,
-                      opacity: cardOpacity,
-                    }}
-                    exit={{
-                      x: exitDirection === 'left' ? -260 : 260,
-                      y: 10,
-                      rotate: exitDirection === 'left' ? -10 : 10,
-                      scale: 0.9,
-                      opacity: 0,
-                      transition: {
-                        duration: 0.28,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 340,
-                      damping: 28,
-                      mass: 0.75,
-                    }}
-                    drag={isTop ? 'x' : false}
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.85}
-                    dragDirectionLock
-                    onDragEnd={isTop ? handleDragEnd : undefined}
-                    onClick={isTop ? () => handleNextCard('left') : undefined}
-                    className={`w-full rounded-3xl p-5 sm:p-6 bg-white flex flex-col justify-between select-none ${
-                      isTop
-                        ? 'cursor-grab active:cursor-grabbing border-2 border-pink-500/80 shadow-xl shadow-slate-900/10'
-                        : 'pointer-events-none border border-slate-200/90 shadow-md'
-                    }`}
-                  >
-                    {/* Card Top Bar: Rating Stars + Verified Client Tag */}
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-3">
+              // Calculate target transform for each position in the deck
+              const targetScale = isFront
+                ? 1
+                : stackPos === 1
+                  ? 0.94 + dragProgress * 0.06
+                  : stackPos === 2
+                    ? 0.88 + dragProgress * 0.06
+                    : 0.82;
+
+              const targetY = isFront
+                ? 0
+                : stackPos === 1
+                  ? 13 - dragProgress * 13
+                  : stackPos === 2
+                    ? 26 - dragProgress * 13
+                    : 36;
+
+              const targetOpacity = isFront
+                ? 1
+                : stackPos === 1
+                  ? 0.88 + dragProgress * 0.12
+                  : stackPos === 2
+                    ? 0.55 + dragProgress * 0.3
+                    : 0;
+
+              const zIndex = 40 - stackPos * 10;
+
+              return (
+                <motion.div
+                  key={card.id}
+                  style={{ zIndex }}
+                  animate={
+                    isFront
+                      ? {
+                          x: dragX,
+                          y: 0,
+                          scale: 1,
+                          rotate: dragX * 0.045,
+                          opacity: 1,
+                        }
+                      : isJustMovedToBack
+                        ? {
+                            // Peel out to the side, then tuck smoothly behind the deck
+                            x: [swipeDir * 160, 0],
+                            y: [6, targetY],
+                            rotate: [swipeDir * 9, 0],
+                            scale: [0.92, targetScale],
+                            opacity: [0.7, targetOpacity],
+                          }
+                        : {
+                            x: 0,
+                            y: targetY,
+                            scale: targetScale,
+                            rotate: 0,
+                            opacity: targetOpacity,
+                          }
+                  }
+                  transition={
+                    isFront && isDragging
+                      ? { duration: 0 }
+                      : isJustMovedToBack
+                        ? { duration: 0.38, ease: [0.22, 1, 0.36, 1] }
+                        : {
+                            type: 'spring',
+                            stiffness: 320,
+                            damping: 28,
+                            mass: 0.7,
+                          }
+                  }
+                  className={`absolute inset-x-0 top-0 h-[192px] sm:h-[188px] rounded-3xl p-4 sm:p-5 bg-white flex flex-col justify-between transition-colors ${
+                    isFront
+                      ? 'border-2 border-pink-500/85 shadow-xl shadow-slate-900/10'
+                      : 'border border-slate-200/90 shadow-md pointer-events-none'
+                  }`}
+                >
+                  {/* Top Row: 5 Stars + Date + Subtle Quote Icon */}
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <div className="flex items-center gap-1">
+                        {[...Array(card.rating)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"
+                          />
+                        ))}
+                        <span className="text-[11px] text-slate-400 ml-1.5 font-semibold">
+                          {card.date}
+                        </span>
+                      </div>
+
+                      <Quote className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500/25 shrink-0" />
+                    </div>
+
+                    {/* Comment Text */}
+                    <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed line-clamp-3">
+                      "{card.comment}"
+                    </p>
+                  </div>
+
+                  {/* Bottom Row: Client Avatar + Name + City + Plan */}
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white font-black text-xs flex items-center justify-center shrink-0">
+                        {card.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .slice(0, 2)}
+                      </div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-1">
-                          {[...Array(card.rating)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-4 h-4 fill-amber-400 text-amber-400"
-                            />
-                          ))}
-                          <span className="text-[11px] text-slate-400 ml-1.5 font-semibold">
-                            {card.date}
-                          </span>
+                          <h4 className="font-extrabold text-slate-950 text-xs sm:text-sm truncate">
+                            {card.name}
+                          </h4>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                         </div>
-
-                        <Quote className="w-5 h-5 text-pink-500/25 shrink-0" />
+                        <span className="text-[10px] sm:text-[11px] text-slate-500 font-medium block truncate">
+                          {card.city}, {card.state} · {card.plan}
+                        </span>
                       </div>
-
-                      {/* Testimonial Quote */}
-                      <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed line-clamp-3 mb-4">
-                        "{card.comment}"
-                      </p>
                     </div>
 
-                    {/* Card Footer: Client Avatar + Name + Plan */}
-                    <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
-                          {card.name
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')
-                            .slice(0, 2)}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <h4 className="font-extrabold text-slate-950 text-xs sm:text-sm truncate">
-                              {card.name}
-                            </h4>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          </div>
-                          <span className="text-[11px] text-slate-500 font-medium block truncate">
-                            {card.city}, {card.state} · {card.plan}
-                          </span>
-                        </div>
-                      </div>
-
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-pink-600 shrink-0">
-                        Passar →
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        goToNextCard(-1);
+                      }}
+                      className="text-[11px] font-extrabold text-pink-600 hover:text-pink-700 px-2 py-1 rounded-lg bg-pink-50 shrink-0 cursor-pointer"
+                    >
+                      Próximo →
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Deck Controls (Previous / Dots / Next Card) */}
-          <div className="flex items-center justify-center gap-4 mt-2">
+          {/* Navigation Controls & Progress Dots */}
+          <div className="flex items-center justify-center gap-4 mt-1">
             <button
               type="button"
-              onClick={handlePrevCard}
-              aria-label="Carta anterior"
+              onClick={goToPrevCard}
+              aria-label="Depoimento anterior"
               className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-pink-400 active:scale-90 transition-all flex items-center justify-center shadow-2xs cursor-pointer"
             >
               <ChevronLeft className="w-4.5 h-4.5" />
@@ -273,21 +384,18 @@ export const Testimonials: React.FC = () => {
 
             <div className="flex items-center gap-1.5">
               {TESTIMONIALS.map((item, idx) => {
-                const isCurrent = idx === activeOriginalIndex;
+                const isCurrent = idx === activeIndex;
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => {
-                      if (idx === activeOriginalIndex) return;
-                      const reordered = [
-                        ...TESTIMONIALS.slice(idx),
-                        ...TESTIMONIALS.slice(0, idx),
-                      ];
-                      setExitDirection('left');
-                      setDeck(reordered);
+                      if (idx === activeIndex) return;
+                      setSwipeDir(-1);
+                      setLastMovedIndex(activeIndex);
+                      setActiveIndex(idx);
                     }}
-                    aria-label={`Ver depoimento ${idx + 1}`}
+                    aria-label={`Ir para depoimento ${idx + 1}`}
                     className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       isCurrent
                         ? 'w-7 bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA]'
@@ -300,8 +408,8 @@ export const Testimonials: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleNextCard('left')}
-              aria-label="Passar próxima carta"
+              onClick={() => goToNextCard(-1)}
+              aria-label="Próximo depoimento"
               className="w-9 h-9 rounded-full bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white active:scale-90 transition-transform flex items-center justify-center shadow-2xs cursor-pointer"
             >
               <ChevronRight className="w-4.5 h-4.5" />
