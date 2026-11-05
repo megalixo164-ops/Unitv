@@ -9,7 +9,111 @@ import {
   Tv,
   CheckCircle,
   MessageCircle,
+  Star,
 } from 'lucide-react';
+
+interface SeriesReleaseItem {
+  id: string;
+  title: string;
+  seasonBadge: string;
+  genre: string;
+  rating: string;
+  quality: string;
+  poster: string;
+}
+
+const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
+  {
+    id: 'stranger-things-5',
+    title: 'Stranger Things',
+    seasonBadge: '5ª Temp',
+    genre: 'Ficção · Netflix',
+    rating: '9.8',
+    quality: '4K HDR',
+    poster: '/assets/series/stranger-things-5.jpg',
+  },
+  {
+    id: 'round-6-t3',
+    title: 'Round 6',
+    seasonBadge: '3ª Temp',
+    genre: 'Suspense · Netflix',
+    rating: '9.7',
+    quality: '4K UHD',
+    poster: '/assets/series/round-6-t3.png',
+  },
+  {
+    id: 'the-last-of-us-2',
+    title: 'The Last of Us',
+    seasonBadge: '2ª Temp',
+    genre: 'Ação · Max',
+    rating: '9.8',
+    quality: '4K HDR',
+    poster: '/assets/series/the-last-of-us-2.png',
+  },
+  {
+    id: 'casa-do-dragao-2',
+    title: 'A Casa do Dragão',
+    seasonBadge: '2ª Temp',
+    genre: 'Épico · Max',
+    rating: '9.6',
+    quality: '4K UHD',
+    poster: '/assets/series/casa-do-dragao-2.png',
+  },
+  {
+    id: 'the-boys-4',
+    title: 'The Boys',
+    seasonBadge: 'Nova Temp',
+    genre: 'Ação · Prime Video',
+    rating: '9.6',
+    quality: '4K HDR',
+    poster: '/assets/series/the-boys-4.jpg',
+  },
+  {
+    id: 'reacher-3',
+    title: 'Reacher',
+    seasonBadge: '3ª Temp',
+    genre: 'Ação · Prime Video',
+    rating: '9.5',
+    quality: '4K UHD',
+    poster: '/assets/series/reacher-3.jpg',
+  },
+  {
+    id: 'cobra-kai-6',
+    title: 'Cobra Kai',
+    seasonBadge: '6ª Temp',
+    genre: 'Ação · Netflix',
+    rating: '9.4',
+    quality: '4K UHD',
+    poster: '/assets/series/cobra-kai-6.jpg',
+  },
+  {
+    id: 'aneis-de-poder-2',
+    title: 'Os Anéis de Poder',
+    seasonBadge: '2ª Temp',
+    genre: 'Fantasia · Prime Video',
+    rating: '9.3',
+    quality: '4K HDR',
+    poster: '/assets/series/aneis-de-poder-2.jpg',
+  },
+  {
+    id: 'the-bear-4',
+    title: 'O Urso (The Bear)',
+    seasonBadge: '4ª Temp',
+    genre: 'Drama · Disney+',
+    rating: '9.5',
+    quality: '4K UHD',
+    poster: '/assets/series/the-bear-4.png',
+  },
+  {
+    id: 'white-lotus-3',
+    title: 'The White Lotus',
+    seasonBadge: '3ª Temp',
+    genre: 'Drama · Max',
+    rating: '9.4',
+    quality: '4K HDR',
+    poster: '/assets/series/white-lotus-3.png',
+  },
+];
 
 interface LiveTvChannelItem {
   id: string;
@@ -43,7 +147,7 @@ const LIVE_CHANNELS_MARQUEE: LiveTvChannelItem[] = [
   {
     id: 'globo',
     name: 'TV Globo',
-    logoSrc: '/assets/logos/globo.svg',
+    logoSrc: '/assets/logos/globo.svg?v=2',
     category: 'Canal Aberto',
     highlights: 'Novelas · Jornal Nacional · Futebol Ao Vivo',
     quality: '4K UHD',
@@ -52,7 +156,7 @@ const LIVE_CHANNELS_MARQUEE: LiveTvChannelItem[] = [
   {
     id: 'sbt',
     name: 'SBT',
-    logoSrc: '/assets/logos/sbt.svg',
+    logoSrc: '/assets/logos/sbt.svg?v=2',
     category: 'Canal Aberto',
     highlights: 'Champions League · Sul-Americana · Entretenimento',
     quality: 'Full HD',
@@ -112,7 +216,7 @@ const StreamingBrandLogo: React.FC<{ name: string }> = ({ name }) => {
       <img
         src={logoSrc}
         alt={name}
-        loading="lazy"
+        loading="eager"
         decoding="async"
         referrerPolicy="no-referrer"
         className="w-full h-full object-contain pointer-events-none"
@@ -123,6 +227,7 @@ const StreamingBrandLogo: React.FC<{ name: string }> = ({ name }) => {
 
 export const ContentCatalog: React.FC = () => {
   // Duplicate arrays for seamless infinite loop
+  const infiniteSeries = [...FEATURED_SERIES_RELEASES, ...FEATURED_SERIES_RELEASES];
   const infinitePlatforms = [...STREAMING_PLATFORMS, ...STREAMING_PLATFORMS];
   const infiniteChannels = [...LIVE_CHANNELS_MARQUEE, ...LIVE_CHANNELS_MARQUEE];
 
@@ -131,6 +236,72 @@ export const ContentCatalog: React.FC = () => {
       id="catalogo"
       className="py-12 sm:py-16 bg-white border-b border-slate-200 overflow-hidden"
     >
+      {/* ===================================================================
+          10 SÉRIES LANÇAMENTOS E ATUALIZADAS MAIS PROCURADAS RODANDO NO TOPO
+      =================================================================== */}
+      <div className="mb-10 sm:mb-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Tv className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 shrink-0" />
+            <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
+              Top 10 Séries Mais Procuradas & Novas Temporadas
+            </h3>
+          </div>
+          <span className="text-[11px] sm:text-xs font-bold text-pink-600 whitespace-nowrap">
+            Todas as Temporadas · 4K
+          </span>
+        </div>
+
+        <div className="relative w-full py-1">
+          {/* Soft fade masks on edges */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
+
+          <div className="animate-marquee-infinite">
+            {infiniteSeries.map((serie, idx) => (
+              <a
+                key={`${serie.id}-${idx}`}
+                href={WHATSAPP_TRIAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow select-none"
+              >
+                <img
+                  src={serie.poster}
+                  alt={serie.title}
+                  loading="eager"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+                />
+
+                {/* Subtle contrast scrim at bottom for poster title & rating */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[9px] font-semibold text-white/90 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded">
+                      {serie.seasonBadge} · 4K
+                    </span>
+                    <span className="text-[9px] font-bold text-amber-400 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
+                      <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                      {serie.rating}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight line-clamp-2">
+                      {serie.title}
+                    </h4>
+                    <p className="text-[10px] text-slate-300 font-medium mt-0.5 truncate">
+                      {serie.genre}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
@@ -163,7 +334,7 @@ export const ContentCatalog: React.FC = () => {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
-        <div className="animate-marquee-infinite gap-3.5 sm:gap-4 px-2">
+        <div className="animate-marquee-infinite">
           {infinitePlatforms.map((platform, index) => (
             <div
               key={`${platform.name}-${index}`}
@@ -211,7 +382,7 @@ export const ContentCatalog: React.FC = () => {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
-        <div className="animate-marquee-infinite-reverse gap-3.5 sm:gap-4 px-2">
+        <div className="animate-marquee-infinite-reverse">
           {infiniteChannels.map((channel, index) => (
             <div
               key={`${channel.id}-${index}`}
@@ -227,7 +398,7 @@ export const ContentCatalog: React.FC = () => {
                     <img
                       src={channel.logoSrc}
                       alt={`Logo oficial ${channel.name}`}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-contain pointer-events-none"

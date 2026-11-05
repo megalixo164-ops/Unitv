@@ -34,6 +34,42 @@ interface MovieReleaseItem {
 
 const FEATURED_MOVIES_RELEASES: MovieReleaseItem[] = [
   {
+    id: 'vingadores-doomsday-2026',
+    title: 'Vingadores: Doomsday',
+    genre: 'Ação · Marvel Studios',
+    year: '2026',
+    rating: '9.8',
+    quality: '4K IMAX',
+    poster: '/assets/movies/vingadores-doomsday-2026.jpg',
+  },
+  {
+    id: 'homem-aranha-2026',
+    title: 'Homem-Aranha: Um Novo Dia',
+    genre: 'Ação · Marvel Studios',
+    year: '2026',
+    rating: '9.7',
+    quality: '4K UHD',
+    poster: '/assets/movies/homem-aranha-2026.jpg',
+  },
+  {
+    id: 'toy-story-5-2026',
+    title: 'Toy Story 5',
+    genre: 'Animação · Disney Pixar',
+    year: '2026',
+    rating: '9.6',
+    quality: '4K HDR',
+    poster: '/assets/movies/toy-story-5-2026.jpg',
+  },
+  {
+    id: 'a-odisseia-2026',
+    title: 'A Odisseia',
+    genre: 'Épico · Christopher Nolan',
+    year: '2026',
+    rating: '9.7',
+    quality: '4K IMAX',
+    poster: '/assets/movies/a-odisseia-2026.jpg',
+  },
+  {
     id: 'ainda-estou-aqui',
     title: 'Ainda Estou Aqui',
     genre: 'Drama · Vencedor do Oscar',
@@ -104,7 +140,7 @@ export const Pricing: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(1); // Trimestral (Mais Vendido)
   const [cardProgress, setCardProgress] = useState<number[]>([1, 0, 1, 2]); // Distance from center (0 = centered)
 
-  // Duplicate 7 movies array for seamless infinite conveyor belt loop
+  // Duplicate 11 movies array for seamless infinite conveyor belt loop
   const infiniteMovies = [...FEATURED_MOVIES_RELEASES, ...FEATURED_MOVIES_RELEASES];
 
   const getPlanWhatsappUrl = (plan: Plan) => {
@@ -325,31 +361,31 @@ export const Pricing: React.FC = () => {
           <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-slate-50 to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-slate-50 to-transparent z-10" />
 
-          <div className="animate-marquee-infinite gap-3.5 sm:gap-4 px-2">
+          <div className="animate-marquee-infinite">
             {infiniteMovies.map((movie, idx) => (
               <a
                 key={`${movie.id}-${idx}`}
                 href={WHATSAPP_TRIAL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-[142px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-all select-none"
+                className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow select-none"
               >
                 <img
                   src={movie.poster}
                   alt={movie.title}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
                 />
 
-                {/* Measured contrast scrim at bottom for poster title & rating */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-between p-2.5 sm:p-3">
+                {/* Subtle contrast scrim at bottom for poster title & rating */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[10px] font-black text-white bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded-md">
-                      {movie.quality}
+                    <span className="text-[9px] font-semibold text-white/90 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded">
+                      {movie.year === '2026' ? '2026 · 4K' : movie.quality}
                     </span>
-                    <span className="text-[10px] font-bold text-amber-400 bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded-md flex items-center gap-0.5 tabular-nums">
+                    <span className="text-[9px] font-bold text-amber-400 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
                       <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                       {movie.rating}
                     </span>
