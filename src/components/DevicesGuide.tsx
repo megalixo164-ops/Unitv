@@ -40,7 +40,7 @@ const INSTALL_STEPS: InstallStep[] = [
   },
   {
     number: '03',
-    title: 'Aproveite 3 Dias Grátis em 4K!',
+    title: 'Solicite e Aproveite Seu Teste Grátis em 4K!',
     subtitle: 'Canais ao vivo, esportes, filmes e séries liberados na hora.',
     timeTag: 'Liberado',
     icon: Tv,
@@ -256,7 +256,7 @@ export const DevicesGuide: React.FC = () => {
                         rel="noopener noreferrer"
                         className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] hover:opacity-95 shadow-sm active:scale-98 transition-all whitespace-nowrap"
                       >
-                        <span>Pedir Teste Agora</span>
+                        <span>Solicitar Teste Grátis</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </a>
                     )}

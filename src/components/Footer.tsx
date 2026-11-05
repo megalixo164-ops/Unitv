@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
-              Revendedor oficial UniTV na Leandro TV+. Experimente 3 dias de teste grátis com mais de 80.000 conteúdos em 4K e Full HD, futebol ao vivo, filmes e séries sem travamentos.
+              Revendedor oficial UniTV na Leandro TV+. Solicite seu teste grátis com mais de 100.000 conteúdos em 4K e Full HD, futebol ao vivo, filmes e séries sem travamentos.
             </p>
 
             <div className="pt-1 flex flex-wrap items-center gap-2.5">
@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
                 className="px-4 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] hover:opacity-95 transition-opacity flex items-center gap-1.5 whitespace-nowrap"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-                <span>Teste Grátis 3 Dias</span>
+                <span>Solicitar Teste Grátis</span>
               </a>
 
               <a
@@ -135,7 +135,7 @@ export const Footer: React.FC = () => {
             <div className="space-y-2.5 text-xs">
               <div className="flex items-center gap-2 text-emerald-400">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>3 Dias de Teste Grátis</span>
+                <span>Solicitar Teste Grátis</span>
               </div>
               <div className="flex items-center gap-2 text-sky-400">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />

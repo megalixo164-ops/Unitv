@@ -62,7 +62,7 @@ export const Navbar: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] via-50% to-[#7928CA] hover:opacity-95 shadow-sm active:scale-98 transition-all duration-150 whitespace-nowrap shrink-0"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-100" />
-            <span>Teste Grátis 3 Dias</span>
+            <span>Solicitar Teste Grátis</span>
           </a>
         </div>
 
@@ -72,9 +72,9 @@ export const Navbar: React.FC = () => {
             href={WHATSAPP_TRIAL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] shadow-xs whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] shadow-xs whitespace-nowrap"
           >
-            <span>Teste 3 Dias</span>
+            <span>Teste Grátis</span>
           </a>
 
           <button
@@ -107,7 +107,7 @@ export const Navbar: React.FC = () => {
               className="w-7 h-7 object-contain shrink-0"
             />
             <span className="text-xs font-bold text-slate-700">
-              Revendedor Oficial UniTV · 3 Dias Grátis
+              Revendedor Oficial UniTV · Teste Grátis
             </span>
           </div>
 
@@ -134,7 +134,7 @@ export const Navbar: React.FC = () => {
               className="w-full py-3.5 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] via-50% to-[#7928CA] shadow-sm flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Solicitar 3 Dias de Teste Grátis</span>
+              <span>Solicitar Teste Grátis</span>
             </a>
           </div>
         </div>

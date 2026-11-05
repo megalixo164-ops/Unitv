@@ -11,11 +11,11 @@ export const WhatsAppButton: React.FC = () => {
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2 px-4 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/25 active:scale-95 transition-transform duration-150"
-        aria-label="Solicitar 3 dias de teste grátis no WhatsApp"
+        aria-label="Solicitar teste grátis no WhatsApp"
       >
         <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 fill-white text-emerald-500 shrink-0" />
         <span className="text-xs font-extrabold tracking-wide whitespace-nowrap">
-          Teste Grátis 3 Dias
+          Solicitar Teste Grátis
         </span>
       </a>
     </div>

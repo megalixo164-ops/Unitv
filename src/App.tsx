@@ -70,11 +70,11 @@ export default function App() {
                   referrerPolicy="no-referrer"
                   className="w-4.5 h-4.5 object-contain"
                 />
-                <span>APP OFICIAL UNITV · 3 DIAS DE TESTE GRÁTIS</span>
+                <span>APP OFICIAL UNITV · SOLICITAR TESTE GRÁTIS</span>
               </div>
 
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-3 sm:mb-4 text-white text-balance">
-                Peça Agora Seus 3 Dias de Teste Grátis no WhatsApp!
+                Solicite Agora Seu Teste Grátis no WhatsApp!
               </h2>
 
               <p className="text-sm sm:text-lg text-white/90 max-w-2xl mx-auto mb-6 sm:mb-8 font-medium">
@@ -89,7 +89,7 @@ export default function App() {
                   className="w-full sm:w-auto px-8 py-4 rounded-2xl font-extrabold text-sm sm:text-base text-slate-950 bg-white hover:bg-slate-100 shadow-lg active:scale-98 transition-transform flex items-center justify-center gap-2.5 whitespace-nowrap"
                 >
                   <MessageCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span>SOLICITAR MEU TESTE GRÁTIS DE 3 DIAS</span>
+                  <span>SOLICITAR TESTE GRÁTIS</span>
                 </a>
               </div>
             </div>

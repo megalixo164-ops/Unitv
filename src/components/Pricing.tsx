@@ -329,7 +329,7 @@ export const Pricing: React.FC = () => {
           onClick={(e) => e.stopPropagation()}
           className="block w-full py-2 px-3 text-xs text-slate-600 hover:text-pink-600 font-bold transition-colors text-center whitespace-nowrap"
         >
-          Testar 3 dias grátis antes de assinar
+          Solicitar teste grátis antes de assinar
         </a>
       </div>
     </>
@@ -427,7 +427,7 @@ export const Pricing: React.FC = () => {
           </div>
 
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight mb-3 text-balance">
-            Escolha Seu Plano Após Testar 3 Dias Grátis
+            Escolha Seu Plano ou Solicite um Teste Grátis
           </h2>
           <p className="text-sm sm:text-lg text-slate-600">
             Ativação imediata pelo WhatsApp. Todos os planos liberam o aplicativo completo com canais em 4K, filmes e séries sem fidelidade.
@@ -595,7 +595,7 @@ export const Pricing: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm">
-                  3 Dias de Teste + Garantia Total
+                  Teste Grátis + Garantia Total
                 </h4>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Comprove a qualidade no seu aparelho antes de pagar qualquer valor.

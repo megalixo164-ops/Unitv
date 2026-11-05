@@ -15,7 +15,7 @@ export const PLANS_1_SCREEN: Plan[] = [
     screens: 1,
     features: [
       'Acesso Oficial UniTV (30 Dias)',
-      '+80.000 canais, filmes e séries',
+      '+100.000 canais, filmes e séries',
       'Qualidade 4K, Full HD e HD',
       'Servidores Anti-Travamento (CDN)',
       'Guia de Programação (EPG) ao vivo',
@@ -35,7 +35,7 @@ export const PLANS_1_SCREEN: Plan[] = [
     screens: 1,
     features: [
       'Acesso Oficial UniTV (90 Dias)',
-      '+80.000 canais, filmes e séries',
+      '+100.000 canais, filmes e séries',
       'Qualidade 4K, Full HD e HD',
       'Servidores Anti-Travamento (CDN)',
       'Guia de Programação (EPG) ao vivo',
@@ -55,7 +55,7 @@ export const PLANS_1_SCREEN: Plan[] = [
     screens: 1,
     features: [
       'Acesso Oficial UniTV (180 Dias)',
-      '+80.000 canais, filmes e séries',
+      '+100.000 canais, filmes e séries',
       'Qualidade 4K, Full HD e HD',
       'Servidores Anti-Travamento (CDN)',
       'Guia de Programação (EPG) ao vivo',
@@ -76,7 +76,7 @@ export const PLANS_1_SCREEN: Plan[] = [
     screens: 1,
     features: [
       'Acesso Oficial UniTV (365 Dias)',
-      '+80.000 canais, filmes e séries',
+      '+100.000 canais, filmes e séries',
       'Qualidade 4K, Full HD e HD',
       'Servidores Anti-Travamento (CDN VIP)',
       'Guia de Programação (EPG) ao vivo',
@@ -164,7 +164,7 @@ export const DEVICE_GUIDES: DeviceGuide[] = [
     instructions: [
       'No seu TV Box ou Fire Stick, solicite o link oficial do app UniTV diretamente no nosso WhatsApp.',
       'Instale o aplicativo UniTV em menos de 2 minutos com nosso passo a passo guiado.',
-      'Abra o UniTV na sua TV e aproveite 3 dias de teste grátis liberados na hora!',
+      'Abra o UniTV na sua TV e aproveite seu teste grátis liberado na hora!',
       'Navegação rápida pelo controle remoto com canais, filmes e séries organizados.'
     ]
   },
@@ -177,7 +177,7 @@ export const DEVICE_GUIDES: DeviceGuide[] = [
     instructions: [
       'Em Smart TVs com sistema Android ou Google TV, você instala o aplicativo oficial UniTV diretamente.',
       'Para TVs Samsung ou LG, nossa equipe orienta a melhor opção compatível ou conexão via Fire Stick/TV Box.',
-      'Chame no WhatsApp para receber o acesso e testar gratuitamente por 3 dias.',
+      'Chame no WhatsApp para receber o acesso e solicitar seu teste grátis.',
       'Suporte completo passo a passo pelo WhatsApp para deixar tudo funcionando.'
     ]
   },
@@ -191,7 +191,7 @@ export const DEVICE_GUIDES: DeviceGuide[] = [
       'Peça o link seguro do aplicativo UniTV Mobile no nosso WhatsApp.',
       'Baixe e instale no seu celular ou tablet Android em poucos segundos.',
       'Entre com seu acesso e assista futebol ao vivo, filmes e séries onde estiver (Wi-Fi ou 4G/5G).',
-      'Teste grátis por 3 dias completos sem compromisso!'
+      'Solicite seu teste grátis sem compromisso!'
     ]
   },
   {
@@ -218,7 +218,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: 'Há 2 dias',
     avatar: '',
-    comment: 'O aplicativo da UniTV na Leandro TV+ é simplesmente perfeito! Testei os 3 dias grátis na minha TV Box e já fechei o plano anual. Jogos em 4K sem travar nada!',
+    comment: 'O aplicativo da UniTV na Leandro TV+ é simplesmente perfeito! Solicitei o teste grátis na minha TV Box e já fechei o plano anual. Jogos em 4K sem travar nada!',
     plan: 'UniTV Anual'
   },
   {
@@ -240,7 +240,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: 'Há 5 dias',
     avatar: '',
-    comment: 'Os 3 dias de teste grátis mostram a confiança no serviço. Usei no fim de semana inteiro assistindo futebol e filmes em 4K e não travou nenhuma vez!',
+    comment: 'O teste grátis mostra a confiança no serviço. Testei assistindo futebol ao vivo e filmes em 4K e não travou nenhuma vez!',
     plan: 'UniTV Anual'
   },
   {
@@ -258,8 +258,8 @@ export const TESTIMONIALS: Testimonial[] = [
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    question: 'Como funcionam os 3 dias de teste grátis do UniTV?',
-    answer: 'É super simples e sem compromisso! Basta clicar em qualquer botão de "Teste Grátis" aqui no site. Você será direcionado para o nosso WhatsApp com a mensagem pronta e nossa equipe libera na hora o seu teste gratuito de 3 dias no aplicativo UniTV.'
+    question: 'Como solicitar o teste grátis do UniTV?',
+    answer: 'É super simples e sem compromisso! Basta clicar em qualquer botão de "Solicitar Teste Grátis" aqui no site. Você será direcionado para o nosso WhatsApp com a mensagem pronta e nossa equipe libera na hora o seu teste gratuito no aplicativo UniTV.'
   },
   {
     question: 'Por que o aplicativo UniTV é o mais recomendado?',
@@ -287,6 +287,6 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: 'Tem contrato de fidelidade ou multa?',
-    answer: 'Nenhuma! Você não fica preso a contratos. Você testa por 3 dias grátis e depois escolhe o plano que preferir (Mensal, Trimestral, Semestral ou Anual) com total liberdade.'
+    answer: 'Nenhuma! Você não fica preso a contratos. Você solicita seu teste grátis e depois escolhe o plano que preferir (Mensal, Trimestral, Semestral ou Anual) com total liberdade.'
   }
 ];

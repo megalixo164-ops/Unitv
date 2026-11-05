@@ -310,7 +310,7 @@ export const ContentCatalog: React.FC = () => {
           </p>
 
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight mb-3 text-balance">
-            Mais de 80 Mil Conteúdos em um Só Aplicativo
+            Mais de 100 Mil Conteúdos em um Só Aplicativo
           </h2>
           <p className="text-sm sm:text-lg text-slate-600">
             Canais ao vivo em 4K e Full HD, todos os campeonatos de futebol e os catálogos completos das maiores plataformas de streaming.
@@ -324,7 +324,7 @@ export const ContentCatalog: React.FC = () => {
             <span>Plataformas de Streaming Já Inclusas no UniTV</span>
           </h3>
           <span className="text-xs font-bold text-purple-700">
-            Liberadas nos 3 dias de teste grátis
+            Liberadas no teste grátis
           </span>
         </div>
       </div>
@@ -445,7 +445,7 @@ export const ContentCatalog: React.FC = () => {
             </div>
             <div>
               <h3 className="text-lg sm:text-2xl font-black mb-1 text-balance">
-                Quer liberar o UniTV por 3 dias grátis agora mesmo?
+                Quer solicitar seu teste grátis do UniTV agora mesmo?
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm">
                 Chame no WhatsApp e receba seu acesso de teste em menos de 3 minutos.
@@ -460,7 +460,7 @@ export const ContentCatalog: React.FC = () => {
             className="w-full sm:w-auto justify-center whitespace-nowrap shrink-0 px-6 py-3.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] hover:opacity-95 shadow-md active:scale-98 transition-transform flex items-center gap-2"
           >
             <MessageCircle className="w-4 h-4 shrink-0" />
-            <span>Solicitar 3 Dias Grátis</span>
+            <span>Solicitar Teste Grátis</span>
           </a>
         </div>
       </div>

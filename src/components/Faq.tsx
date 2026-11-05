@@ -22,7 +22,7 @@ export const Faq: React.FC = () => {
             Perguntas Frequentes Sobre o UniTV
           </h2>
           <p className="text-sm sm:text-base text-slate-600">
-            Confira como funcionam os 3 dias de teste grátis, a instalação e as recargas na Leandro TV+.
+            Confira como funciona o teste grátis, a instalação e as recargas na Leandro TV+.
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export const Faq: React.FC = () => {
         <div className="mt-10 bg-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-5">
           <div>
             <h4 className="font-extrabold text-slate-900 text-sm sm:text-base mb-1">
-              Quer pedir seu teste grátis de 3 dias ou tirar uma dúvida?
+              Quer solicitar seu teste grátis ou tirar uma dúvida?
             </h4>
             <p className="text-xs sm:text-sm text-slate-500">
               Chame agora no WhatsApp (47) 99273-3349 que liberamos na hora para você.
@@ -93,7 +93,7 @@ export const Faq: React.FC = () => {
             className="w-full sm:w-auto justify-center whitespace-nowrap shrink-0 px-6 py-3.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 shadow-xs flex items-center gap-2 transition-colors"
           >
             <MessageCircle className="w-4 h-4 shrink-0" />
-            <span>Solicitar Teste no WhatsApp</span>
+            <span>Solicitar Teste Grátis</span>
           </a>
         </div>
       </div>
