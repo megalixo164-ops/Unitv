@@ -1,7 +1,7 @@
 import { Plan, ChannelItem, StreamingPlatform, DeviceGuide, Testimonial, FaqItem } from '../types';
 
 export const WHATSAPP_NUMBER = '5547992733349';
-export const WHATSAPP_TRIAL_MESSAGE = 'Olá, vim solicitar meu teste grátis';
+export const WHATSAPP_TRIAL_MESSAGE = 'Olá, gostaria de solicitar a ativação do meu teste gratuito.';
 export const WHATSAPP_TRIAL_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TRIAL_MESSAGE)}`;
 export const WHATSAPP_CLOSED_OS_MESSAGE = 'Olá tenho uma tv com sistema operacional fechado e gostaria de solicitar um teste grátis';
 export const WHATSAPP_CLOSED_OS_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_CLOSED_OS_MESSAGE)}`;
