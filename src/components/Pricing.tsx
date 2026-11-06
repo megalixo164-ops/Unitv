@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { motion } from 'motion/react';
 import {
   PLANS_1_SCREEN,
   WHATSAPP_NUMBER,
@@ -80,12 +79,12 @@ const FEATURED_MOVIES_RELEASES: MovieReleaseItem[] = [
   },
   {
     id: 'capitao-america-4',
-    title: 'Capitão América: Admirável Mundo Novo',
+    title: 'Capitão América: Mundo Novo',
     genre: 'Ação · Marvel Studios',
     year: '2025',
     rating: '9.1',
     quality: '4K HDR',
-    poster: '/assets/movies/capitao-america-4.jpg',
+    poster: '/assets/movies/capitao-america-4.jpg?v=2',
   },
   {
     id: 'moana-2',
@@ -134,96 +133,168 @@ const FEATURED_MOVIES_RELEASES: MovieReleaseItem[] = [
   },
 ];
 
+const INFINITE_MOVIES = [
+  ...FEATURED_MOVIES_RELEASES,
+  ...FEATURED_MOVIES_RELEASES,
+];
+
+/**
+ * Memoized Movie Marquee so plan selection never triggers re-renders on the conveyor belt
+ */
+const MoviesMarquee = React.memo(() => (
+  <div className="mb-10 sm:mb-14">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3.5 flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
+        <Film className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 shrink-0" />
+        <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
+          Sucessos de Cinema Já Liberados no UniTV
+        </h3>
+      </div>
+      <span className="text-[11px] sm:text-xs font-bold text-purple-700 whitespace-nowrap">
+        Dublado & Legendado · 4K
+      </span>
+    </div>
+
+    <div className="relative w-full py-1">
+      {/* Soft fade masks on edges */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-slate-50 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-slate-50 to-transparent z-10" />
+
+      <div className="animate-marquee-infinite">
+        {INFINITE_MOVIES.map((movie, idx) => (
+          <a
+            key={`${movie.id}-${idx}`}
+            href={WHATSAPP_TRIAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm select-none"
+          >
+            <picture className="w-full h-full block">
+              <source
+                srcSet={movie.poster.replace(/\.(jpg|jpeg|png)(\?.*)?$/i, '.webp$2')}
+                type="image/webp"
+              />
+              <img
+                src={movie.poster}
+                alt={movie.title}
+                width={168}
+                height={252}
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover pointer-events-none"
+              />
+            </picture>
+
+            {/* Subtle contrast scrim at bottom for poster title & rating */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-[9px] font-semibold text-white/95 bg-black/75 px-1.5 py-0.5 rounded">
+                  {movie.year === '2026' ? '2026 · 4K' : movie.quality}
+                </span>
+                <span className="text-[9px] font-bold text-amber-400 bg-black/75 px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
+                  <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                  {movie.rating}
+                </span>
+              </div>
+
+              <div>
+                <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight line-clamp-2">
+                  {movie.title}
+                </h4>
+                <p className="text-[10px] text-slate-300 font-medium mt-0.5 truncate">
+                  {movie.genre}
+                </p>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+));
+
 export const Pricing: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(1); // Trimestral (Mais Vendido)
-  const [cardProgress, setCardProgress] = useState<number[]>([1, 0, 1, 2]); // Distance from center (0 = centered)
-
-  // Duplicate 11 movies array for seamless infinite conveyor belt loop
-  const infiniteMovies = [...FEATURED_MOVIES_RELEASES, ...FEATURED_MOVIES_RELEASES];
 
   const getPlanWhatsappUrl = (plan: Plan) => {
     const text = `Olá, vim pelo site da Leandro TV+ e quero assinar o *${plan.name}* no valor de R$ ${plan.price.toFixed(2).replace('.', ',')}.`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
   };
 
-  // Continuous 60fps interpolation of each card's distance from the viewport center
-  const updateCarouselMetrics = useCallback(() => {
-    const container = carouselRef.current;
-    if (!container) return;
-    const cards = container.querySelectorAll<HTMLElement>('[data-plan-card]');
-    if (!cards.length) return;
+  const scrollToCard = useCallback(
+    (index: number, behavior: ScrollBehavior = 'smooth') => {
+      const container = carouselRef.current;
+      if (!container) return;
+      const cards = container.querySelectorAll<HTMLElement>('[data-plan-card]');
+      if (!cards[index]) return;
 
-    const containerCenter = container.scrollLeft + container.clientWidth / 2;
-    let closestIdx = 0;
-    let minDistance = Infinity;
-    const distances: number[] = [];
+      const targetCard = cards[index];
+      const scrollLeft =
+        targetCard.offsetLeft -
+        (container.clientWidth - targetCard.clientWidth) / 2;
 
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft + card.clientWidth / 2;
-      const rawDist = Math.abs(containerCenter - cardCenter);
-      const normalized = Math.min(1.5, rawDist / (card.clientWidth || 300));
-      distances.push(normalized);
-
-      if (rawDist < minDistance) {
-        minDistance = rawDist;
-        closestIdx = idx;
-      }
-    });
-
-    setCardProgress(distances);
-    setActiveIndex((prev) => (prev !== closestIdx ? closestIdx : prev));
-  }, []);
-
-  const handleScroll = () => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-    rafRef.current = requestAnimationFrame(updateCarouselMetrics);
-  };
-
-  const scrollToCard = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
-    const container = carouselRef.current;
-    if (!container) return;
-    const cards = container.querySelectorAll<HTMLElement>('[data-plan-card]');
-    if (!cards[index]) return;
-
-    const targetCard = cards[index];
-    const scrollLeft =
-      targetCard.offsetLeft -
-      (container.clientWidth - targetCard.clientWidth) / 2;
-
-    container.scrollTo({
-      left: Math.max(0, scrollLeft),
-      behavior,
-    });
-    setActiveIndex(index);
-  }, []);
+      container.scrollTo({
+        left: Math.max(0, scrollLeft),
+        behavior,
+      });
+      setActiveIndex(index);
+    },
+    []
+  );
 
   const handlePrev = () => {
-    const nextIdx = activeIndex <= 0 ? PLANS_1_SCREEN.length - 1 : activeIndex - 1;
+    const nextIdx =
+      activeIndex <= 0 ? PLANS_1_SCREEN.length - 1 : activeIndex - 1;
     scrollToCard(nextIdx);
   };
 
   const handleNext = () => {
-    const nextIdx = activeIndex >= PLANS_1_SCREEN.length - 1 ? 0 : activeIndex + 1;
+    const nextIdx =
+      activeIndex >= PLANS_1_SCREEN.length - 1 ? 0 : activeIndex + 1;
     scrollToCard(nextIdx);
   };
 
-  // Center the "Mais Vendido" card on initial mount for mobile/tablet carousel
+  // Zero-Jank IntersectionObserver: updates active dot/tab off the main scroll loop
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (window.innerWidth < 1024) {
-        scrollToCard(1, 'instant' as ScrollBehavior);
-        updateCarouselMetrics();
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const cards = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-plan-card]')
+    );
+    if (!cards.length) return;
+
+    // Center "Mais Vendido" (index 1) on initial mobile mount without animation
+    if (window.innerWidth < 1024 && cards[1]) {
+      const target = cards[1];
+      container.scrollLeft = Math.max(
+        0,
+        target.offsetLeft - (container.clientWidth - target.clientWidth) / 2
+      );
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            const idxAttr = entry.target.getAttribute('data-plan-index');
+            if (idxAttr !== null) {
+              const idx = Number(idxAttr);
+              setActiveIndex((prev) => (prev !== idx ? idx : prev));
+            }
+          }
+        }
+      },
+      {
+        root: container,
+        threshold: 0.6,
       }
-    }, 60);
-    return () => {
-      clearTimeout(timer);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [scrollToCard, updateCarouselMetrics]);
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
 
   const renderPlanCardContent = (plan: Plan, isHighlight: boolean) => (
     <>
@@ -259,7 +330,6 @@ export const Pricing: React.FC = () => {
             height={34}
             loading="lazy"
             decoding="async"
-            referrerPolicy="no-referrer"
             className="w-8.5 h-8.5 object-contain shrink-0 pointer-events-none"
           />
         </div>
@@ -340,78 +410,8 @@ export const Pricing: React.FC = () => {
       id="planos"
       className="py-12 sm:py-20 bg-slate-50 border-b border-slate-200 overflow-hidden"
     >
-      {/* ===================================================================
-          7 FILMES LANÇAMENTOS ATUALIZADOS RODANDO NA PARTE DE CIMA
-      =================================================================== */}
-      <div className="mb-10 sm:mb-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3.5 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Film className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 shrink-0" />
-            <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
-              Sucessos de Cinema Já Liberados no UniTV
-            </h3>
-          </div>
-          <span className="text-[11px] sm:text-xs font-bold text-purple-700 whitespace-nowrap">
-            Dublado & Legendado · 4K
-          </span>
-        </div>
-
-        <div className="relative w-full py-1">
-          {/* Soft fade masks on edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-slate-50 to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-slate-50 to-transparent z-10" />
-
-          <div className="animate-marquee-infinite">
-            {infiniteMovies.map((movie, idx) => (
-              <a
-                key={`${movie.id}-${idx}`}
-                href={WHATSAPP_TRIAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow select-none"
-              >
-                <picture className="w-full h-full block">
-                  <source
-                    srcSet={movie.poster.replace(/\.(jpg|jpeg|png)$/i, '.webp')}
-                    type="image/webp"
-                  />
-                  <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    width={168}
-                    height={252}
-                    loading="eager"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
-                  />
-                </picture>
-
-                {/* Subtle contrast scrim at bottom for poster title & rating */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9px] font-semibold text-white/95 bg-black/75 px-1.5 py-0.5 rounded">
-                      {movie.year === '2026' ? '2026 · 4K' : movie.quality}
-                    </span>
-                    <span className="text-[9px] font-bold text-amber-400 bg-black/75 px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
-                      <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                      {movie.rating}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight line-clamp-2">
-                      {movie.title}
-                    </h4>
-                    <p className="text-[10px] text-slate-300 font-medium mt-0.5 truncate">
-                      {movie.genre}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* 11 FILMES LANÇAMENTOS ATUALIZADOS RODANDO NA PARTE DE CIMA (MEMOIZADO) */}
+      <MoviesMarquee />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -425,7 +425,6 @@ export const Pricing: React.FC = () => {
               height={20}
               loading="lazy"
               decoding="async"
-              referrerPolicy="no-referrer"
               className="w-5 h-5 object-contain"
             />
             <span className="text-xs font-extrabold uppercase tracking-wider bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] bg-clip-text text-transparent">
@@ -442,21 +441,15 @@ export const Pricing: React.FC = () => {
         </div>
 
         {/* ===================================================================
-            1. VERSÃO MOBILE & TABLET (CARROSSEL COM FÍSICA DE TOQUE SUAVE)
+            1. VERSÃO MOBILE & TABLET (CARROSSEL NATIVO 100% FLUIDO SEM TRAVAR)
             Aparece em telas menores que 1024px (lg:hidden)
         =================================================================== */}
         <div className="lg:hidden">
-          {/* Quick Plan Selector Tabs + Animated Finger Swipe Indicator */}
+          {/* Quick Plan Selector Tabs + Swipe Hint */}
           <div className="flex flex-col items-center gap-3 mb-2">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200/90 text-slate-600 text-xs font-bold shadow-2xs">
-              <motion.span
-                animate={{ x: [-3, 3, -3] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                className="text-pink-600 flex items-center"
-              >
-                <MoveHorizontal className="w-3.5 h-3.5" />
-              </motion.span>
-              <span>Deslize suavemente para os lados</span>
+              <MoveHorizontal className="w-3.5 h-3.5 text-pink-600" />
+              <span>Deslize para o lado para ver os planos</span>
             </div>
 
             <div className="flex items-center justify-center gap-1.5 w-full overflow-x-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -467,62 +460,43 @@ export const Pricing: React.FC = () => {
                     key={plan.id}
                     type="button"
                     onClick={() => scrollToCard(idx)}
-                    className={`relative px-3.5 py-2 rounded-xl text-xs font-extrabold transition-colors duration-200 shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-extrabold transition-colors duration-150 shrink-0 cursor-pointer ${
                       isSelected
-                        ? 'text-white'
+                        ? 'bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white shadow-xs'
                         : 'bg-white text-slate-600 border border-slate-200/90'
                     }`}
                   >
-                    {isSelected && (
-                      <motion.span
-                        layoutId="mobilePlanPill"
-                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] -z-0 shadow-xs"
-                      />
-                    )}
-                    <span className="relative z-10">
-                      {plan.name.replace('UniTV ', '')}
-                    </span>
+                    {plan.name.replace('UniTV ', '')}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Native Touch-Swipe Horizontal Carousel Track with Vertical Scroll Passthrough */}
+          {/* Pure Hardware-Accelerated CSS Scroll-Snap Track (Zero JS onScroll Re-renders) */}
           <div
             ref={carouselRef}
-            onScroll={handleScroll}
-            style={{ touchAction: 'pan-x pan-y' }}
-            className="flex items-stretch gap-3.5 overflow-x-auto overflow-y-visible snap-x snap-mandatory pt-6 pb-7 px-[9vw] -mx-4 overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{
+              WebkitOverflowScrolling: 'touch',
+            }}
+            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory pt-6 pb-7 px-[8vw] -mx-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {PLANS_1_SCREEN.map((plan, idx) => {
               const isHighlight = plan.popular || plan.bestValue;
               const isCurrent = activeIndex === idx;
-              const dist = cardProgress[idx] ?? (isCurrent ? 0 : 1);
-
-              const scale = 1 - Math.min(dist, 1) * 0.055;
-              const opacity = 1 - Math.min(dist, 1) * 0.22;
-              const translateY = Math.min(dist, 1) * 6;
 
               return (
                 <div
                   key={plan.id}
                   data-plan-card
+                  data-plan-index={idx}
                   onClick={() => scrollToCard(idx)}
-                  style={{
-                    touchAction: 'pan-x pan-y',
-                    transform: `translate3d(0, ${translateY.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`,
-                    opacity: Number(opacity.toFixed(2)),
-                    transition: 'transform 140ms cubic-bezier(0.22, 1, 0.36, 1), opacity 140ms ease-out, border-color 200ms ease, box-shadow 200ms ease',
-                    willChange: 'transform, opacity',
-                  }}
-                  className={`snap-center shrink-0 w-[82vw] max-w-[318px] relative rounded-3xl p-6 flex flex-col justify-between select-none ${
+                  className={`snap-center snap-always shrink-0 w-[84vw] max-w-[320px] relative rounded-3xl p-6 flex flex-col justify-between bg-white select-none transition-colors duration-200 ${
                     isCurrent
                       ? isHighlight
-                        ? 'bg-white border-2 border-pink-500 shadow-xl shadow-pink-500/15'
-                        : 'bg-white border-2 border-purple-500 shadow-xl shadow-purple-500/10'
-                      : 'bg-white border border-slate-200/90 shadow-xs'
+                        ? 'border-2 border-pink-500 shadow-lg shadow-pink-500/10'
+                        : 'border-2 border-purple-500 shadow-lg shadow-purple-500/10'
+                      : 'border border-slate-200/90 shadow-xs'
                   }`}
                 >
                   {renderPlanCardContent(plan, Boolean(isHighlight || isCurrent))}
@@ -531,7 +505,7 @@ export const Pricing: React.FC = () => {
             })}
           </div>
 
-          {/* Mobile Carousel Bottom Controls (Arrows + Spring Progress Dots) */}
+          {/* Mobile Carousel Bottom Controls (Arrows + Progress Dots) */}
           <div className="flex items-center justify-center gap-4 mt-0.5 mb-4">
             <button
               type="button"
@@ -549,7 +523,7 @@ export const Pricing: React.FC = () => {
                   type="button"
                   onClick={() => scrollToCard(idx)}
                   aria-label={`Ir para ${plan.name}`}
-                  className={`h-2.5 rounded-full transition-all duration-300 ease-out ${
+                  className={`h-2.5 rounded-full transition-all duration-200 ${
                     activeIndex === idx
                       ? 'w-8 bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA]'
                       : 'w-2.5 bg-slate-300'
