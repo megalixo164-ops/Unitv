@@ -218,7 +218,7 @@ const StreamingBrandLogo: React.FC<{ name: string }> = ({ name }) => {
         alt={name}
         width={40}
         height={36}
-        loading="lazy"
+        loading="eager"
         decoding="async"
         className="w-full h-full object-contain pointer-events-none"
       />
@@ -277,7 +277,7 @@ export const ContentCatalog: React.FC = () => {
                     alt={serie.title}
                     width={168}
                     height={252}
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
                   />
@@ -408,7 +408,7 @@ export const ContentCatalog: React.FC = () => {
                       alt={`Logo oficial ${channel.name}`}
                       width={40}
                       height={36}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       className="w-full h-full object-contain pointer-events-none"
                     />

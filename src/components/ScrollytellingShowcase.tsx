@@ -2,15 +2,15 @@ import React from 'react';
 import { useScroll, useSpring, motion } from 'motion/react';
 
 /**
- * Lightweight section wrapper using CSS content-visibility for zero TBT/INP overhead
- * on low-end Android and older iPhones.
+ * Lightweight section wrapper that preserves active compositor animations
+ * when scrolling up and down the page.
  */
 export const ScrollReveal: React.FC<{
   children: React.ReactNode;
   delay?: number;
   className?: string;
 }> = ({ children, className = '' }) => {
-  return <div className={`cv-section ${className}`}>{children}</div>;
+  return <div className={className}>{children}</div>;
 };
 
 /**

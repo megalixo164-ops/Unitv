@@ -10,15 +10,9 @@
   }
 }
 
-/* Below-the-fold rendering optimization for Android Chrome & modern browsers */
-.cv-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 620px;
-}
-
 @keyframes marquee-infinite {
   0% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
     transform: translate3d(-50%, 0, 0);
@@ -30,7 +24,7 @@
     transform: translate3d(-50%, 0, 0);
   }
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0%, 0, 0);
   }
 }
 
@@ -39,7 +33,9 @@
   width: max-content;
   gap: 1rem;
   padding-right: 1rem;
-  animation: marquee-infinite 36s linear infinite;
+  animation: marquee-infinite 36s linear infinite !important;
+  animation-play-state: running !important;
+  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -50,22 +46,10 @@
   width: max-content;
   gap: 1rem;
   padding-right: 1rem;
-  animation: marquee-infinite-reverse 34s linear infinite;
+  animation: marquee-infinite-reverse 34s linear infinite !important;
+  animation-play-state: running !important;
+  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .animate-marquee-infinite:hover,
-  .animate-marquee-infinite-reverse:hover {
-    animation-play-state: paused;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee-infinite,
-  .animate-marquee-infinite-reverse {
-    animation-duration: 90s;
-  }
 }
