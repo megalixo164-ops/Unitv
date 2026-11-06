@@ -35,6 +35,8 @@
   padding-right: 1rem;
   animation: marquee-infinite 36s linear infinite !important;
   animation-play-state: running !important;
+  pointer-events: none !important;
+  user-select: none !important;
   will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
@@ -48,6 +50,8 @@
   padding-right: 1rem;
   animation: marquee-infinite-reverse 34s linear infinite !important;
   animation-play-state: running !important;
+  pointer-events: none !important;
+  user-select: none !important;
   will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;

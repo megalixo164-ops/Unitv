@@ -258,16 +258,13 @@ export const ContentCatalog: React.FC = () => {
           <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
-          <div className="animate-marquee-infinite">
+          <div className="animate-marquee-infinite pointer-events-none select-none">
             {infiniteSeries.map((serie, idx) => (
-              <a
+              <div
                 key={`${serie.id}-${idx}`}
-                href={WHATSAPP_TRIAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow select-none"
+                className="relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm pointer-events-none select-none"
               >
-                <picture className="w-full h-full block">
+                <picture className="w-full h-full block pointer-events-none">
                   <source
                     srcSet={serie.poster.replace(/\.(jpg|jpeg|png)$/i, '.webp')}
                     type="image/webp"
@@ -279,12 +276,13 @@ export const ContentCatalog: React.FC = () => {
                     height={252}
                     loading="eager"
                     decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+                    draggable={false}
+                    className="w-full h-full object-cover pointer-events-none select-none"
                   />
                 </picture>
 
                 {/* Subtle contrast scrim at bottom for poster title & rating */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5 pointer-events-none">
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-[9px] font-semibold text-white/95 bg-black/75 px-1.5 py-0.5 rounded">
                       {serie.seasonBadge} · 4K
@@ -304,7 +302,7 @@ export const ContentCatalog: React.FC = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </div>
