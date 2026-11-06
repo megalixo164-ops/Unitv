@@ -27,10 +27,10 @@ export const Footer: React.FC = () => {
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] via-50% to-[#00A8FF]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 border-b border-slate-800/80">
-          {/* Brand Info (2 cols on lg) */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 border-b border-slate-800/80 text-center">
+          {/* Brand Info (2 cols on lg) - Fully Centered */}
+          <div className="lg:col-span-2 flex flex-col items-center text-center space-y-4">
+            <div className="flex items-center justify-center gap-3">
               <Logo variant="dark" size="sm" layout="horizontal" showSubtitle={true} />
               <div className="h-9 w-9 rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
                 <img
@@ -40,17 +40,16 @@ export const Footer: React.FC = () => {
                   height={28}
                   loading="lazy"
                   decoding="async"
-                  referrerPolicy="no-referrer"
                   className="w-full h-full object-contain"
                 />
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm mx-auto text-center">
               Revendedor oficial UniTV na Leandro TV+. Solicite seu teste grátis com mais de 100.000 conteúdos em 4K e Full HD, futebol ao vivo, filmes e séries sem travamentos.
             </p>
 
-            <div className="pt-1 flex flex-wrap items-center gap-2.5">
+            <div className="pt-1 flex flex-wrap items-center justify-center gap-2.5">
               <a
                 href={WHATSAPP_TRIAL_URL}
                 target="_blank"
@@ -74,7 +73,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Nav Links */}
-          <div>
+          <div className="flex flex-col items-center">
             <h4 className="text-xs font-black uppercase tracking-wider text-white mb-3.5">
               Navegação
             </h4>
@@ -113,7 +112,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Destaques de Conteúdo */}
-          <div>
+          <div className="flex flex-col items-center">
             <h4 className="text-xs font-black uppercase tracking-wider text-white mb-3.5">
               Incluso no UniTV
             </h4>
@@ -128,28 +127,28 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Pagamento e Selos */}
-          <div>
+          <div className="flex flex-col items-center">
             <h4 className="text-xs font-black uppercase tracking-wider text-white mb-3.5">
               Segurança & Ativação
             </h4>
-            <div className="space-y-2.5 text-xs">
-              <div className="flex items-center gap-2 text-emerald-400">
+            <div className="space-y-2.5 text-xs flex flex-col items-center">
+              <div className="flex items-center justify-center gap-2 text-emerald-400">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>Solicitar Teste Grátis</span>
               </div>
-              <div className="flex items-center gap-2 text-sky-400">
+              <div className="flex items-center justify-center gap-2 text-sky-400">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>Pix com recarga imediata</span>
               </div>
-              <div className="flex items-center gap-2 text-pink-400">
+              <div className="flex items-center justify-center gap-2 text-pink-400">
                 <CreditCard className="w-4 h-4 shrink-0" />
                 <span>Cartões de Crédito</span>
               </div>
-              <div className="flex items-center gap-2 text-amber-400">
+              <div className="flex items-center justify-center gap-2 text-amber-400">
                 <ShieldCheck className="w-4 h-4 shrink-0" />
                 <span>Suporte Oficial via WhatsApp</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-300">
+              <div className="flex items-center justify-center gap-2 text-slate-300">
                 <Lock className="w-4 h-4 shrink-0" />
                 <span>Ambiente 100% Seguro</span>
               </div>
