@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   MoveHorizontal,
-  Quote,
 } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
@@ -92,7 +91,7 @@ export const Testimonials: React.FC = () => {
       const elapsed = Math.max(1, Date.now() - startTimeRef.current);
       const velocity = Math.abs(dragX) / elapsed; // px per ms
 
-      if (Math.abs(dragX) > 38 || (Math.abs(dragX) > 15 && velocity > 0.35)) {
+      if (Math.abs(dragX) > 36 || (Math.abs(dragX) > 14 && velocity > 0.32)) {
         goToNextCard(dragX < 0 ? -1 : 1);
       } else {
         setDragX(0);
@@ -147,7 +146,7 @@ export const Testimonials: React.FC = () => {
         {/* Compact & Centered Section Header + Unified 4-Stat Strip */}
         <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-9">
           <p className="text-[11px] sm:text-xs font-extrabold uppercase tracking-widest bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] bg-clip-text text-transparent mb-2">
-            Opinião de Quem Já Usa
+            Opinião Real de Quem Já Usa
           </p>
 
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-2 text-balance">
@@ -208,10 +207,15 @@ export const Testimonials: React.FC = () => {
             setIsInteracting(false);
           }}
         >
-          {/* Swipe Instruction Indicator */}
-          <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-500 mb-3">
-            <MoveHorizontal className="w-3.5 h-3.5 text-pink-600 animate-pulse" />
-            <span>Deslize o card com o dedo para passar</span>
+          {/* Swipe Instruction Indicator + Card Counter */}
+          <div className="flex items-center justify-between px-1 text-[11px] font-bold text-slate-500 mb-3">
+            <div className="flex items-center gap-1.5">
+              <MoveHorizontal className="w-3.5 h-3.5 text-pink-600 animate-pulse" />
+              <span>Deslize o card com o dedo para passar</span>
+            </div>
+            <span className="text-[11px] font-extrabold text-slate-700 bg-white border border-slate-200/90 px-2.5 py-0.5 rounded-full tabular-nums">
+              {activeIndex + 1} / {total}
+            </span>
           </div>
 
           {/* Stacked Cards Container (All cards strictly absolute so they stack cleanly) */}
@@ -224,23 +228,25 @@ export const Testimonials: React.FC = () => {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            className="relative h-[225px] sm:h-[220px] w-full cursor-grab active:cursor-grabbing"
+            className="relative h-[248px] sm:h-[240px] w-full cursor-grab active:cursor-grabbing"
           >
             {TESTIMONIALS.map((card, idx) => {
-              // 0 = front card, 1 = second, 2 = third, 3 = back card (just swiped)
+              // 0 = front card, 1 = second, 2 = third, total - 1 = card just swiped to the back
               const stackPos = (idx - activeIndex + total) % total;
               const isFront = stackPos === 0;
               const isJustMovedToBack =
                 idx === lastMovedIndex && stackPos === total - 1;
 
-              // Calculate target transform for each position in the deck
+              // Only render top 3 cards in stack + the card currently animating to the back
+              const isVisibleInDeck = stackPos <= 2 || isJustMovedToBack;
+
               const targetScale = isFront
                 ? 1
                 : stackPos === 1
                   ? 0.94 + dragProgress * 0.06
                   : stackPos === 2
                     ? 0.88 + dragProgress * 0.06
-                    : 0.82;
+                    : 0.84;
 
               const targetY = isFront
                 ? 0
@@ -248,22 +254,33 @@ export const Testimonials: React.FC = () => {
                   ? 13 - dragProgress * 13
                   : stackPos === 2
                     ? 26 - dragProgress * 13
-                    : 36;
+                    : 34;
 
               const targetOpacity = isFront
                 ? 1
                 : stackPos === 1
-                  ? 0.88 + dragProgress * 0.12
+                  ? 0.9 + dragProgress * 0.1
                   : stackPos === 2
                     ? 0.55 + dragProgress * 0.3
                     : 0;
 
-              const zIndex = 40 - stackPos * 10;
+              const zIndex = isFront
+                ? 40
+                : stackPos === 1
+                  ? 30
+                  : stackPos === 2
+                    ? 20
+                    : isJustMovedToBack
+                      ? 10
+                      : 1;
 
               return (
                 <motion.div
                   key={card.id}
-                  style={{ zIndex }}
+                  style={{
+                    zIndex,
+                    visibility: isVisibleInDeck ? 'visible' : 'hidden',
+                  }}
                   animate={
                     isFront
                       ? {
@@ -276,11 +293,11 @@ export const Testimonials: React.FC = () => {
                       : isJustMovedToBack
                         ? {
                             // Peel out to the side, then tuck smoothly behind the deck
-                            x: [swipeDir * 160, 0],
+                            x: [swipeDir * 165, 0],
                             y: [6, targetY],
                             rotate: [swipeDir * 9, 0],
                             scale: [0.92, targetScale],
-                            opacity: [0.7, targetOpacity],
+                            opacity: [0.75, 0],
                           }
                         : {
                             x: 0,
@@ -302,15 +319,15 @@ export const Testimonials: React.FC = () => {
                             mass: 0.7,
                           }
                   }
-                  className={`absolute inset-x-0 top-0 h-[192px] sm:h-[188px] rounded-3xl p-4 sm:p-5 bg-white flex flex-col justify-between transition-colors ${
+                  className={`absolute inset-x-0 top-0 h-[214px] sm:h-[208px] rounded-3xl p-4 sm:p-5 bg-white flex flex-col justify-between transition-colors ${
                     isFront
                       ? 'border-2 border-pink-500/85 shadow-xl shadow-slate-900/10'
                       : 'border border-slate-200/90 shadow-md pointer-events-none'
                   }`}
                 >
-                  {/* Top Row: 5 Stars + Date + Subtle Quote Icon */}
+                  {/* Top Row: 5 Stars + Date + Topic Tag */}
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex items-center gap-1">
                         {[...Array(card.rating)].map((_, i) => (
                           <Star
@@ -318,30 +335,49 @@ export const Testimonials: React.FC = () => {
                             className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"
                           />
                         ))}
-                        <span className="text-[11px] text-slate-400 ml-1.5 font-semibold">
+                        <span className="text-[11px] text-slate-400 ml-1 font-semibold">
                           {card.date}
                         </span>
                       </div>
 
-                      <Quote className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500/25 shrink-0" />
+                      {card.topicTag && (
+                        <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 border border-purple-200/70 px-2 py-0.5 rounded-full whitespace-nowrap">
+                          {card.topicTag}
+                        </span>
+                      )}
                     </div>
 
                     {/* Comment Text */}
-                    <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed line-clamp-3">
+                    <p className="text-xs sm:text-[13.5px] text-slate-700 font-medium leading-relaxed line-clamp-4">
                       "{card.comment}"
                     </p>
                   </div>
 
-                  {/* Bottom Row: Client Avatar + Name + City + Plan */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                  {/* Bottom Row: Real Brazilian Client Photo Avatar + Name + City + Plan */}
+                  <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white font-black text-xs flex items-center justify-center shrink-0">
-                        {card.name
-                          .split(' ')
-                          .map((n) => n[0])
-                          .join('')
-                          .slice(0, 2)}
+                      <div className="relative shrink-0">
+                        <picture>
+                          <source
+                            srcSet={card.avatar.replace(/\.jpg$/, '.webp')}
+                            type="image/webp"
+                          />
+                          <img
+                            src={card.avatar}
+                            alt={`Foto de ${card.name}`}
+                            width={42}
+                            height={42}
+                            loading="eager"
+                            decoding="async"
+                            className="w-10 h-10 sm:w-10.5 sm:h-10.5 rounded-full object-cover ring-2 ring-pink-500/25 pointer-events-none"
+                          />
+                        </picture>
+                        <span
+                          aria-hidden="true"
+                          className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white flex items-center justify-center"
+                        />
                       </div>
+
                       <div className="min-w-0">
                         <div className="flex items-center gap-1">
                           <h4 className="font-extrabold text-slate-950 text-xs sm:text-sm truncate">
@@ -361,7 +397,7 @@ export const Testimonials: React.FC = () => {
                         e.stopPropagation();
                         goToNextCard(-1);
                       }}
-                      className="text-[11px] font-extrabold text-pink-600 hover:text-pink-700 px-2 py-1 rounded-lg bg-pink-50 shrink-0 cursor-pointer"
+                      className="text-[11px] font-extrabold text-pink-600 hover:text-pink-700 px-2.5 py-1 rounded-lg bg-pink-50 shrink-0 cursor-pointer"
                     >
                       Próximo →
                     </button>
@@ -371,13 +407,13 @@ export const Testimonials: React.FC = () => {
             })}
           </div>
 
-          {/* Navigation Controls & Progress Dots */}
-          <div className="flex items-center justify-center gap-4 mt-1">
+          {/* Navigation Controls & 10-Card Progress Dots */}
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mt-1">
             <button
               type="button"
               onClick={goToPrevCard}
               aria-label="Depoimento anterior"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-pink-400 active:scale-90 transition-all flex items-center justify-center shadow-2xs cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-pink-400 active:scale-90 transition-all flex items-center justify-center shadow-2xs cursor-pointer shrink-0"
             >
               <ChevronLeft className="w-4.5 h-4.5" />
             </button>
@@ -398,8 +434,8 @@ export const Testimonials: React.FC = () => {
                     aria-label={`Ir para depoimento ${idx + 1}`}
                     className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                       isCurrent
-                        ? 'w-7 bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA]'
-                        : 'w-2 bg-slate-300 hover:bg-slate-400'
+                        ? 'w-6 bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA]'
+                        : 'w-1.5 bg-slate-300 hover:bg-slate-400'
                     }`}
                   />
                 );
@@ -410,7 +446,7 @@ export const Testimonials: React.FC = () => {
               type="button"
               onClick={() => goToNextCard(-1)}
               aria-label="Próximo depoimento"
-              className="w-9 h-9 rounded-full bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white active:scale-90 transition-transform flex items-center justify-center shadow-2xs cursor-pointer"
+              className="w-9 h-9 rounded-full bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] text-white active:scale-90 transition-transform flex items-center justify-center shadow-2xs cursor-pointer shrink-0"
             >
               <ChevronRight className="w-4.5 h-4.5" />
             </button>

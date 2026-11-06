@@ -45,6 +45,7 @@ export interface Testimonial {
   rating: number;
   date: string;
   avatar: string;
+  topicTag?: string;
   comment: string;
   plan: string;
 }
