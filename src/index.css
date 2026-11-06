@@ -5,9 +5,15 @@
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     letter-spacing: -0.02em;
   }
+}
+
+/* Below-the-fold rendering optimization for Android Chrome & modern browsers */
+.cv-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 620px;
 }
 
 @keyframes marquee-infinite {
@@ -34,9 +40,9 @@
   gap: 1rem;
   padding-right: 1rem;
   animation: marquee-infinite 36s linear infinite;
-  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-marquee-infinite-reverse {
@@ -45,14 +51,21 @@
   gap: 1rem;
   padding-right: 1rem;
   animation: marquee-infinite-reverse 34s linear infinite;
-  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .animate-marquee-infinite:hover,
   .animate-marquee-infinite-reverse:hover {
     animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-infinite,
+  .animate-marquee-infinite-reverse {
+    animation-duration: 90s;
   }
 }

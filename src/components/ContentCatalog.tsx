@@ -216,9 +216,10 @@ const StreamingBrandLogo: React.FC<{ name: string }> = ({ name }) => {
       <img
         src={logoSrc}
         alt={name}
-        loading="eager"
+        width={40}
+        height={36}
+        loading="lazy"
         decoding="async"
-        referrerPolicy="no-referrer"
         className="w-full h-full object-contain pointer-events-none"
       />
     </div>
@@ -266,22 +267,29 @@ export const ContentCatalog: React.FC = () => {
                 rel="noopener noreferrer"
                 className="group relative w-[144px] sm:w-[168px] aspect-[2/3] shrink-0 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow select-none"
               >
-                <img
-                  src={serie.poster}
-                  alt={serie.title}
-                  loading="eager"
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
-                />
+                <picture className="w-full h-full block">
+                  <source
+                    srcSet={serie.poster.replace(/\.(jpg|jpeg|png)$/i, '.webp')}
+                    type="image/webp"
+                  />
+                  <img
+                    src={serie.poster}
+                    alt={serie.title}
+                    width={168}
+                    height={252}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+                  />
+                </picture>
 
                 {/* Subtle contrast scrim at bottom for poster title & rating */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent flex flex-col justify-between p-2 sm:p-2.5">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[9px] font-semibold text-white/90 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded">
+                    <span className="text-[9px] font-semibold text-white/95 bg-black/75 px-1.5 py-0.5 rounded">
                       {serie.seasonBadge} · 4K
                     </span>
-                    <span className="text-[9px] font-bold text-amber-400 bg-black/55 backdrop-blur-xs px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
+                    <span className="text-[9px] font-bold text-amber-400 bg-black/75 px-1.5 py-0.5 rounded flex items-center gap-0.5 tabular-nums">
                       <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                       {serie.rating}
                     </span>
@@ -398,9 +406,10 @@ export const ContentCatalog: React.FC = () => {
                     <img
                       src={channel.logoSrc}
                       alt={`Logo oficial ${channel.name}`}
-                      loading="eager"
+                      width={40}
+                      height={36}
+                      loading="lazy"
                       decoding="async"
-                      referrerPolicy="no-referrer"
                       className="w-full h-full object-contain pointer-events-none"
                     />
                   </div>

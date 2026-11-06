@@ -2,9 +2,9 @@ import React from 'react';
 
 interface LogoProps {
   className?: string;
-  variant?: 'light' | 'dark'; // 'light' means placed on a light background, 'dark' means placed on a dark background
+  variant?: 'light' | 'dark';
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  layout?: 'horizontal' | 'stacked'; // 'horizontal' for navbar/compact, 'stacked' uses full vertical artwork
+  layout?: 'horizontal' | 'stacked';
   showSubtitle?: boolean;
 }
 
@@ -15,13 +15,13 @@ export const Logo: React.FC<LogoProps> = ({
   layout = 'horizontal',
   showSubtitle = true,
 }) => {
-  const logoSrc = '/assets/aistudio/Logo_Premium_LeandroTV___1__61939e8e.png';
+  const logoFallbackSrc = '/assets/aistudio/Logo_Premium_LeandroTV___1__61939e8e.png';
+  const logoWebpSrc = '/assets/aistudio/logo-leandrotv.webp';
 
-  // Full Stacked Original Logo Showcase (ideal for Hero, Modal, and Brand Showcases)
   if (layout === 'stacked') {
     const stackedDimensions = {
       sm: 'w-28 h-28',
-      md: 'w-40 h-40',
+      md: 'w-36 h-36 sm:w-40 sm:h-40',
       lg: 'w-52 h-52 sm:w-60 sm:h-60',
       xl: 'w-64 h-64 sm:w-72 sm:h-72',
     };
@@ -34,24 +34,28 @@ export const Logo: React.FC<LogoProps> = ({
         <div
           className={`relative flex items-center justify-center overflow-hidden rounded-3xl ${
             variant === 'dark'
-              ? 'bg-white p-3 shadow-xl shadow-fuchsia-500/15 ring-1 ring-white/20'
+              ? 'bg-white p-3 shadow-md ring-1 ring-white/20'
               : ''
           } ${stackedDimensions[size]}`}
         >
-          <img
-            src={logoSrc}
-            alt="LeandroTV+ | TV Online Premium"
-            referrerPolicy="no-referrer"
-            className={`w-full h-full object-contain ${
-              variant === 'light' ? 'mix-blend-multiply' : ''
-            }`}
-          />
+          <picture className="w-full h-full flex items-center justify-center">
+            <source srcSet={logoWebpSrc} type="image/webp" />
+            <img
+              src={logoFallbackSrc}
+              alt="LeandroTV+ | TV Online Premium"
+              width={160}
+              height={160}
+              decoding="async"
+              className={`w-full h-full object-contain ${
+                variant === 'light' ? 'mix-blend-multiply' : ''
+              }`}
+            />
+          </picture>
         </div>
       </div>
     );
   }
 
-  // Horizontal Layout (ideal for Top Bar Navigation and Compact Headers)
   const iconBoxSizes = {
     sm: 'w-9 h-9',
     md: 'w-11 h-11',
@@ -80,25 +84,29 @@ export const Logo: React.FC<LogoProps> = ({
       id="leandro-tv-logo"
       className={`inline-flex items-center gap-2.5 sm:gap-3 select-none ${className}`}
     >
-      {/* Official 3D Ribbon Play Emblem cropped from the official uploaded logo */}
       <div
         className={`relative flex items-center justify-center shrink-0 overflow-hidden rounded-xl ${
           !isLightBg
-            ? 'bg-white shadow-md shadow-pink-500/20 ring-1 ring-white/20'
+            ? 'bg-white shadow-sm ring-1 ring-white/20'
             : ''
         } ${iconBoxSizes[size]}`}
       >
-        <img
-          src={logoSrc}
-          alt="LeandroTV+ Ícone"
-          referrerPolicy="no-referrer"
-          className={`w-full h-full object-cover object-[50%_18%] scale-[1.65] ${
-            isLightBg ? 'mix-blend-multiply' : ''
-          }`}
-        />
+        <picture className="w-full h-full block">
+          <source srcSet={logoWebpSrc} type="image/webp" />
+          <img
+            src={logoFallbackSrc}
+            alt="LeandroTV+ Ícone"
+            width={44}
+            height={44}
+            loading="lazy"
+            decoding="async"
+            className={`w-full h-full object-cover object-[50%_18%] scale-[1.65] ${
+              isLightBg ? 'mix-blend-multiply' : ''
+            }`}
+          />
+        </picture>
       </div>
 
-      {/* Brand Text Lockup matching the exact rainbow gradient (Orange -> Red/Pink -> Purple -> Blue/Cyan) */}
       <div className="flex flex-col justify-center">
         <div
           className={`font-black leading-none flex items-baseline tracking-tight whitespace-nowrap ${textSizes[size]}`}

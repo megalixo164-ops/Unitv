@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Logo } from './Logo';
 import { WHATSAPP_TRIAL_URL, UNITV_LOGO_SRC } from '../data/mockData';
 import { Menu, X, MessageCircle, Sparkles } from 'lucide-react';
 
@@ -17,7 +16,7 @@ export const Navbar: React.FC = () => {
   return (
     <header
       id="main-navbar"
-      className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-xs border-b border-slate-200/80"
+      className="sticky top-0 z-50 w-full bg-white/98 lg:bg-white/95 lg:backdrop-blur-xs border-b border-slate-200/80"
     >
       {/* Top vibrant brand gradient accent line */}
       <div className="h-1 w-full bg-gradient-to-r from-[#FF9900] via-[#FF1E56] via-55% to-[#00A8FF]" />
