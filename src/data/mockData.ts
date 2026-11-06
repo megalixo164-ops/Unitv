@@ -3,7 +3,9 @@ import { Plan, ChannelItem, StreamingPlatform, DeviceGuide, Testimonial, FaqItem
 export const WHATSAPP_NUMBER = '5547992733349';
 export const WHATSAPP_TRIAL_MESSAGE = 'Olá, vim solicitar meu teste grátis';
 export const WHATSAPP_TRIAL_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TRIAL_MESSAGE)}`;
-export const UNITV_LOGO_SRC = '/assets/aistudio/image_311ee0b3.png';
+export const WHATSAPP_CLOSED_OS_MESSAGE = 'Olá tenho uma tv com sistema operacional fechado e gostaria de solicitar um teste grátis';
+export const WHATSAPP_CLOSED_OS_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_CLOSED_OS_MESSAGE)}`;
+export const UNITV_LOGO_SRC = '/assets/aistudio/unitv-logo.webp';
 
 export const PLANS_1_SCREEN: Plan[] = [
   {
@@ -217,7 +219,7 @@ export const TESTIMONIALS: Testimonial[] = [
     state: 'SC',
     rating: 5,
     date: 'Há 1 dia',
-    avatar: '/assets/avatars/avatar-1.jpg',
+    avatar: '/assets/avatars/avatar-1.jpg?v=2',
     topicTag: 'Futebol Sem Travar',
     comment: 'Quarta-feira passada teve jogo decisivo da Libertadores e rodou liso demais na minha TV Box! Antes minha lista antiga travava no meio do lance, aqui na Leandro TV+ o Premiere e a ESPN ficam em 4K sem atraso.',
     plan: 'UniTV Anual'
@@ -241,7 +243,7 @@ export const TESTIMONIALS: Testimonial[] = [
     state: 'PR',
     rating: 5,
     date: 'Há 3 dias',
-    avatar: '/assets/avatars/avatar-3.jpg',
+    avatar: '/assets/avatars/avatar-3.jpg?v=2',
     topicTag: 'Animes & Crunchyroll',
     comment: 'Pra quem curte anime o aplicativo UniTV é absurdo! Tem One Piece, Solo Leveling, Jujutsu Kaisen e Demon Slayer tudo atualizado, dublado e legendado em alta definição. Cancelei todas as outras assinaturas.',
     plan: 'UniTV Semestral'
@@ -325,7 +327,7 @@ export const TESTIMONIALS: Testimonial[] = [
     state: 'PR',
     rating: 5,
     date: 'Há 2 semanas',
-    avatar: '/assets/avatars/avatar-10.jpg',
+    avatar: '/assets/avatars/avatar-10.jpg?v=2',
     topicTag: 'Super Economia',
     comment: 'Eu gastava mais de R$ 260 por mês somando TV por assinatura e 4 streamings diferentes. Solicitei o teste grátis no WhatsApp, vi que tinha tudo num lugar só e economizei muito. Recomendo de olhos fechados!',
     plan: 'UniTV Trimestral'

@@ -69,7 +69,7 @@ export const Hero: React.FC = () => {
                   type="image/webp"
                 />
                 <img
-                  src="/assets/aistudio/Sala_moderna_com_TV_UniTV_e_luz_azul_91a8c590.png"
+                  src="/assets/aistudio/hero-tv-fallback.jpg"
                   alt="Aplicativo Oficial UniTV rodando na Smart TV em 4K"
                   width={1024}
                   height={576}

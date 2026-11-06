@@ -4,19 +4,17 @@ import { MessageCircle } from 'lucide-react';
 
 export const WhatsAppButton: React.FC = () => {
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 select-none">
       <a
         id="floating-whatsapp-btn"
         href={WHATSAPP_TRIAL_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2 px-4 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/25 active:scale-95 transition-transform duration-150"
+        title="Solicitar Teste Grátis no WhatsApp"
         aria-label="Solicitar teste grátis no WhatsApp"
+        className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/30 active:scale-95 transition-transform duration-150 flex items-center justify-center"
       >
-        <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 fill-white text-emerald-500 shrink-0" />
-        <span className="text-xs font-extrabold tracking-wide whitespace-nowrap">
-          Solicitar Teste Grátis
-        </span>
+        <MessageCircle className="w-6 h-6 fill-white text-emerald-500" />
       </a>
     </div>
   );

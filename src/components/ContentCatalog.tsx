@@ -39,7 +39,7 @@ const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
     genre: 'Suspense · Netflix',
     rating: '9.7',
     quality: '4K UHD',
-    poster: '/assets/series/round-6-t3.png',
+    poster: '/assets/series/round-6-t3.jpg',
   },
   {
     id: 'the-last-of-us-2',
@@ -48,7 +48,7 @@ const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
     genre: 'Ação · Max',
     rating: '9.8',
     quality: '4K HDR',
-    poster: '/assets/series/the-last-of-us-2.png',
+    poster: '/assets/series/the-last-of-us-2.jpg',
   },
   {
     id: 'casa-do-dragao-2',
@@ -57,7 +57,7 @@ const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
     genre: 'Épico · Max',
     rating: '9.6',
     quality: '4K UHD',
-    poster: '/assets/series/casa-do-dragao-2.png',
+    poster: '/assets/series/casa-do-dragao-2.jpg',
   },
   {
     id: 'the-boys-4',
@@ -102,7 +102,7 @@ const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
     genre: 'Drama · Disney+',
     rating: '9.5',
     quality: '4K UHD',
-    poster: '/assets/series/the-bear-4.png',
+    poster: '/assets/series/the-bear-4.jpg',
   },
   {
     id: 'white-lotus-3',
@@ -111,7 +111,7 @@ const FEATURED_SERIES_RELEASES: SeriesReleaseItem[] = [
     genre: 'Drama · Max',
     rating: '9.4',
     quality: '4K HDR',
-    poster: '/assets/series/white-lotus-3.png',
+    poster: '/assets/series/white-lotus-3.jpg',
   },
 ];
 

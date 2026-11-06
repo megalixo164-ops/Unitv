@@ -359,7 +359,7 @@ export const Testimonials: React.FC = () => {
                       <div className="relative shrink-0">
                         <picture>
                           <source
-                            srcSet={card.avatar.replace(/\.jpg$/, '.webp')}
+                            srcSet={card.avatar.replace(/\.jpg(\?.*)?$/, '.webp$1')}
                             type="image/webp"
                           />
                           <img

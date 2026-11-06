@@ -1,4 +1,5 @@
 import React from 'react';
+import { WHATSAPP_CLOSED_OS_URL } from '../data/mockData';
 import {
   Tv,
   Clock,
@@ -8,6 +9,8 @@ import {
   Layers,
   Cpu,
   RefreshCw,
+  MessageCircle,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const Features: React.FC = () => {
@@ -79,6 +82,55 @@ export const Features: React.FC = () => {
       className="py-12 sm:py-16 bg-slate-50 border-b border-slate-200 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Dedicated Banner for Samsung, LG & Roku Smart TVs */}
+        <div className="max-w-4xl mx-auto mb-10 sm:mb-14">
+          <div className="relative rounded-3xl bg-white border-2 border-purple-500/25 shadow-md p-5 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
+            <div className="space-y-2.5 max-w-xl">
+              <div className="inline-flex flex-wrap items-center justify-center md:justify-start gap-1.5">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-100 text-purple-800">
+                  <Tv className="w-3 h-3" />
+                  Smart TV Samsung
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-pink-100 text-pink-800">
+                  <Tv className="w-3 h-3" />
+                  Smart TV LG
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-orange-100 text-orange-800">
+                  <Tv className="w-3 h-3" />
+                  Sistema Roku
+                </span>
+              </div>
+
+              <h3 className="text-lg sm:text-2xl font-extrabold text-slate-950 tracking-tight text-balance">
+                Você tem uma TV Samsung, LG ou Sistema Roku?
+              </h3>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                Nós também temos aplicativos exclusivos para o seu sistema operacional! Entre em contato agora mesmo para realizar um teste grátis direto na sua TV.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-0.5 text-[11px] font-bold text-emerald-700">
+                <span className="inline-flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  Instalação fácil sem precisar de aparelho extra
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full md:w-auto shrink-0">
+              <a
+                href={WHATSAPP_CLOSED_OS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] hover:opacity-95 shadow-md shadow-pink-500/15 active:scale-98 transition-transform whitespace-nowrap"
+              >
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span>Solicitar Teste para Minha TV</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <p className="text-xs font-extrabold uppercase tracking-widest bg-gradient-to-r from-[#FF8A00] via-[#FF1E56] to-[#7928CA] bg-clip-text text-transparent mb-2">
